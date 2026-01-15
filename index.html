@@ -3,210 +3,264 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ANDA - Hub de Engenharia SST</title>
+    <title>ANDA - Sistema Integrado SST</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-dark: #0a0b10; --surface: #161b22; --border: #30363d;
-            --neon-green: #00ff9d; --neon-purple: #bd34fe;
-            --text-main: #f0f6fc; --danger: #da3633;
+            --bg-dark: #0a0b10;
+            --surface-dark: #161b22;
+            --surface-light: #21262d;
+            --primary-neon: #00ff9d; 
+            --secondary-neon: #bd34fe; 
+            --text-main: #f0f6fc;
+            --text-dim: #8b949e;
+            --border: #30363d;
+            --danger: #da3633;
+            --success: #238636;
         }
-        body { background: var(--bg-dark); color: var(--text-main); font-family: 'Roboto', sans-serif; margin: 0; padding-bottom: 80px;}
-        
-        /* HEADER PREMIUM */
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            margin: 0; padding: 0;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* HEADER PREMIUM RESTAURADO */
         header {
-            background: rgba(22, 27, 34, 0.95); border-bottom: 1px solid var(--neon-green);
-            padding: 15px; position: sticky; top: 0; z-index: 100;
-            display: flex; justify-content: space-between; align-items: center;
-            backdrop-filter: blur(10px);
+            background: rgba(22, 27, 34, 0.98);
+            border-bottom: 2px solid var(--primary-neon);
+            padding: 15px 20px;
+            position: sticky; top: 0; z-index: 1000;
+            display: flex; align-items: center; justify-content: space-between;
+            box-shadow: 0 4px 30px rgba(0,0,0,0.5);
         }
-        .brand { font-family: 'Orbitron'; font-weight: 700; color: var(--neon-green); letter-spacing: 2px; }
-        
-        /* CARDS & INPUTS */
-        .container { max-width: 900px; margin: 20px auto; padding: 0 15px; }
-        .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 20px; }
-        
+
+        .brand-wrapper { display: flex; align-items: center; gap: 15px; }
+
+        .brand-name {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8rem; font-weight: 700; letter-spacing: 4px;
+            background: linear-gradient(90deg, #fff, var(--primary-neon));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            text-transform: uppercase;
+        }
+
+        .logo-svg {
+            width: 45px; height: 45px;
+            filter: drop-shadow(0 0 8px var(--primary-neon));
+        }
+
+        /* SELETOR DE CIDADE */
+        #city-selector {
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            height: 90vh; text-align: center;
+        }
+
+        .city-card {
+            background: var(--surface-light);
+            border: 1px solid var(--primary-neon);
+            padding: 30px 60px; border-radius: 50px;
+            cursor: pointer; transition: 0.4s;
+            font-family: 'Orbitron'; color: var(--primary-neon);
+            text-transform: uppercase; letter-spacing: 2px;
+            box-shadow: 0 0 15px rgba(0, 255, 157, 0.1);
+        }
+
+        .city-card:hover {
+            background: var(--primary-neon); color: #000;
+            box-shadow: 0 0 30px var(--primary-neon);
+        }
+
+        /* CONTAINER PRINCIPAL */
+        #app-container { display: none; max-width: 900px; margin: 20px auto; padding: 0 20px; }
+
+        .section-title {
+            color: var(--primary-neon); font-family: 'Orbitron';
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 10px; margin-top: 30px;
+        }
+
+        .input-group {
+            background: var(--surface-dark); border: 1px solid var(--border);
+            padding: 20px; border-radius: 12px; margin-bottom: 20px;
+        }
+
         input, textarea, select {
             width: 100%; background: #0d1117; border: 1px solid var(--border);
-            color: white; padding: 12px; border-radius: 6px; margin-top: 5px;
+            color: white; padding: 14px; border-radius: 8px; margin-top: 10px;
+            font-size: 1rem;
         }
-        input:focus { outline: none; border-color: var(--neon-purple); }
 
-        /* GRID DE DOCUMENTOS (DASHBOARD) */
+        .btn-validate {
+            background: linear-gradient(45deg, var(--primary-neon), #02b683);
+            color: #000; border: none; padding: 15px; border-radius: 8px;
+            font-weight: bold; width: 100%; margin-top: 15px; cursor: pointer;
+            font-family: 'Orbitron'; text-transform: uppercase;
+        }
+
+        /* GRID DE DOCUMENTOS - ESTILO PREMIUM */
         .doc-grid {
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-            gap: 10px; margin-top: 20px;
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            gap: 15px; margin-top: 20px;
         }
-        .doc-btn {
-            background: #21262d; border: 1px solid var(--border); color: #8b949e;
-            padding: 15px 5px; border-radius: 8px; font-size: 0.75rem; font-weight: bold;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            cursor: pointer; transition: 0.3s; text-align: center; height: 100px;
+
+        .doc-item {
+            background: var(--surface-light); border: 1px solid var(--border);
+            padding: 20px 10px; border-radius: 12px; text-align: center;
+            cursor: pointer; transition: 0.3s;
         }
-        .doc-btn:hover { background: #30363d; color: white; transform: translateY(-2px); }
-        .doc-btn.active { border-color: var(--neon-purple); color: var(--neon-purple); background: rgba(189, 52, 254, 0.1); }
-        .doc-btn.base { border-color: var(--neon-green); color: var(--neon-green); }
 
-        /* BOTÕES DE AÇÃO */
-        .btn { border: none; padding: 12px; border-radius: 6px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px;}
-        .btn-primary { background: linear-gradient(45deg, var(--neon-green), #02b683); color: #000; }
-        .btn-purple { background: linear-gradient(45deg, #7c12b5, var(--neon-purple)); color: white; }
+        .doc-item:hover { border-color: var(--secondary-neon); transform: translateY(-3px); }
+        .doc-item.active { border-color: var(--secondary-neon); background: rgba(189, 52, 254, 0.05); }
+        .doc-item span { display: block; font-size: 0.7rem; font-weight: bold; margin-top: 8px; color: var(--text-dim); }
 
-        /* CIDADES INDEX */
-        #city-selector { height: 90vh; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px; }
-        .city-btn { padding: 20px 50px; border: 1px solid var(--neon-green); background: transparent; color: var(--neon-green); border-radius: 30px; font-size: 1.2rem; cursor: pointer; }
-        
-        /* LOGO SVG */
-        .logo-mini { width: 30px; height: 30px; }
+        .badge { display: inline-block; padding: 5px 15px; border-radius: 4px; font-weight: bold; margin-top: 10px; }
+        .bg-risk-3 { background: var(--danger); color: white; }
+
+        .loader {
+            border: 3px solid #f3f3f3; border-top: 3px solid var(--secondary-neon);
+            border-radius: 50%; width: 20px; height: 20px; animation: spin 1s linear infinite;
+            display: none; margin: 0 auto;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
 
-    <svg style="display:none;">
-        <symbol id="icon-logo" viewBox="0 0 100 100">
-            <path d="M50 10 L15 90 L35 90 L50 55 L65 90 L85 90 Z" fill="none" stroke="currentColor" stroke-width="5"/>
-            <circle cx="50" cy="10" r="5" fill="currentColor"/>
-        </symbol>
-    </svg>
+    <header>
+        <div class="brand-wrapper">
+            <svg class="logo-svg" viewBox="0 0 100 100">
+                <path d="M50 15 L20 85 L35 85 L50 50 L65 85 L80 85 Z" fill="none" stroke="#00ff9d" stroke-width="4" stroke-linejoin="round"/>
+                <path d="M50 35 L50 75" stroke="#bd34fe" stroke-width="3" stroke-linecap="round"/> 
+                <circle cx="50" cy="15" r="3" fill="#00ff9d" />
+            </svg>
+            <span class="brand-name">Anda</span>
+        </div>
+        <div id="city-badge" style="color: var(--primary-neon); font-family: 'Orbitron'; font-size: 0.8rem;"></div>
+    </header>
 
     <div id="city-selector">
-        <h2 style="font-family:'Orbitron'; color:var(--neon-purple)">SELECIONE A BASE</h2>
-        <button class="city-btn" onclick="startApp('Araucária')">ARAUCÁRIA / PR</button>
-        <button class="city-btn" style="border-color:var(--border); color:var(--text-main)" onclick="startApp('Contenda')">CONTENDA / PR</button>
+        <h2 style="font-family:'Orbitron'; margin-bottom: 30px;">Selecione a Unidade</h2>
+        <div class="city-card" onclick="initApp('Araucária')">Araucária / PR</div>
+        <p style="color:var(--text-dim); margin-top:20px;" onclick="initApp('Contenda')">ou Contenda / PR</p>
     </div>
 
-    <div id="app-main" style="display:none;">
-        <header>
-            <div style="display:flex; align-items:center; gap:10px;">
-                <svg class="logo-mini" style="color:var(--neon-green)"><use href="#icon-logo"/></svg>
-                <span class="brand">ANDA <span style="font-size:0.5em; color:#fff; opacity:0.5">V3.0 SYSTEM</span></span>
-            </div>
-            <div id="status-badge" style="font-size:0.7rem; color:var(--neon-green); border:1px solid var(--neon-green); padding:2px 8px; border-radius:4px;">ONLINE</div>
-        </header>
+    <div id="app-container">
+        <h2 class="section-title">Validação Legal (Receita Federal)</h2>
+        <div class="input-group">
+            <label>CNPJ da Empresa</label>
+            <input type="number" id="cnpjInput" placeholder="00000000000000">
+            <button class="btn-validate" onclick="fetchCompanyData()">
+                <div id="spinner" class="loader"></div>
+                Validar e Sincronizar
+            </button>
+            <div id="apiError" style="color:var(--danger); display:none; margin-top:10px; font-size:0.8rem;"></div>
+        </div>
 
-        <div class="container">
-            <div class="card">
-                <h3 style="margin:0 0 15px 0; color:var(--neon-green)">1. DADOS DA MATRIZ (Validação)</h3>
-                <input type="number" id="cnpj" placeholder="CNPJ (Somente números)">
-                <button class="btn btn-primary" onclick="validateCNPJ()">VALIDAR & SINCRONIZAR DADOS</button>
+        <div id="resultArea" style="display:none;">
+            <div class="input-group">
+                <label>Razão Social</label>
+                <input type="text" id="razaoSocial" readonly>
                 
-                <div id="company-details" style="display:none; margin-top:15px; border-top:1px solid var(--border); padding-top:10px;">
-                    <input type="text" id="razao" readonly style="color:var(--neon-green); font-weight:bold;">
-                    <input type="text" id="cnae" readonly>
-                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
-                        <input type="text" id="risco" readonly>
-                        <input type="text" id="cidade" readonly>
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+                    <div>
+                        <label>CNAE</label>
+                        <input type="text" id="cnaeCode" readonly>
                     </div>
-                    <p style="font-size:0.7rem; color:#888; text-align:center; margin-top:5px;">
-                        🔒 Dados salvos no Cache Seguro do Anda System
-                    </p>
+                    <div>
+                        <label>Risco (NR-04)</label>
+                        <div id="riskDisplay" class="badge">-</div>
+                    </div>
                 </div>
             </div>
 
-            <div class="card">
-                <h3 style="margin:0 0 15px 0; color:var(--neon-purple)">2. GERENCIAMENTO DE RISCOS (PGR)</h3>
-                <label style="font-size:0.8rem; color:#aaa">Inventário de Riscos (Base para o PCMSO)</label>
-                <textarea id="pgr-riscos" rows="4" placeholder="Descreva os riscos físicos, químicos, biológicos..."></textarea>
-                <button class="btn btn-purple" onclick="savePGRData()">SALVAR INVENTÁRIO (PGR)</button>
-            </div>
-
-            <h3 style="font-family:'Orbitron'; margin-bottom:10px;">CENTRAL DE DOCUMENTOS</h3>
-            <p style="font-size:0.8rem; color:#888;">Selecione o documento para abrir o módulo de preenchimento inteligente.</p>
+            <h2 class="section-title">Central de Documentos Integrados</h2>
+            <p style="font-size: 0.8rem; color: var(--text-dim);">Clique para abrir o módulo específico. Os dados acima serão importados automaticamente.</p>
             
-            <div class="doc-grid" id="doc-grid">
+            <div class="doc-grid" id="docGrid">
                 </div>
         </div>
     </div>
 
     <script>
-        // CONFIGURAÇÃO
-        const docsList = [
-            "PCMSO", "LTCAT", "AET", "ASO", "PPP", "CAT", "Ficha EPI", "OS", 
-            "Laudo Insalub.", "Laudo Peric.", "PCA", "PPR", "APR", "PT", 
-            "Treinamentos", "Mapa Riscos", "Plano Ação", "PGRTR", "NR-10", 
-            "NR-20", "Radiologia", "Resgate"
-        ];
-        let currentCity = "";
+        const docs = ["PGR", "PCMSO", "LTCAT", "ASO", "AET", "PPP", "CAT", "Ficha EPI", "Ordem de Serviço", "Insalubridade", "Periculosidade", "Treinamentos", "Mapa de Riscos"];
+        let selectedCity = "";
 
-        function startApp(city) {
-            currentCity = city;
-            localStorage.setItem('anda_city', city); // Persistência
+        function initApp(city) {
+            selectedCity = city;
             document.getElementById('city-selector').style.display = 'none';
-            document.getElementById('app-main').style.display = 'block';
-            renderGrid();
+            document.getElementById('app-container').style.display = 'block';
+            document.getElementById('city-badge').innerText = city.toUpperCase();
+            renderDocs();
         }
 
-        // RENDERIZA O GRID DE DOCUMENTOS
-        function renderGrid() {
-            const grid = document.getElementById('doc-grid');
-            grid.innerHTML = '';
-            
-            docsList.forEach(doc => {
-                const btn = document.createElement('div');
-                btn.className = 'doc-btn';
-                btn.innerHTML = `<span style="font-size:1.5rem; display:block; margin-bottom:5px;">📄</span>${doc}`;
+        function renderDocs() {
+            const grid = document.getElementById('docGrid');
+            docs.forEach(doc => {
+                const div = document.createElement('div');
+                div.className = 'doc-item';
+                if(doc === "PCMSO" || doc === "LTCAT" || doc === "ASO") div.classList.add('active');
+                div.innerHTML = `<div style="font-size:1.5rem">📄</div><span>${doc}</span>`;
                 
-                // Lógica de "Link" Inteligente
-                if(doc === 'PCMSO') {
-                    btn.classList.add('active'); // Destaque para o PCMSO
-                    btn.onclick = () => {
-                        // Salva estado antes de ir
-                        savePGRData();
-                        // Navega para o módulo
-                        window.location.href = 'pcmso.html';
-                    };
-                } else {
-                    btn.onclick = () => alert(`O módulo ${doc} será implementado na próxima atualização do sistema.`);
-                }
-                
-                grid.appendChild(btn);
+                div.onclick = () => {
+                    if(doc === "PCMSO" || doc === "LTCAT" || doc === "ASO") {
+                        // Navega para o arquivo específico
+                        const file = doc.toLowerCase().replace(" ", "") + ".html";
+                        window.location.href = file;
+                    } else {
+                        alert("Módulo " + doc + " em fase de certificação.");
+                    }
+                };
+                grid.appendChild(div);
             });
         }
 
-        async function validateCNPJ() {
-            const cnpj = document.getElementById('cnpj').value.replace(/\D/g,'');
-            if(cnpj.length !== 14) return alert("CNPJ Inválido");
-
-            document.getElementById('company-details').style.display = 'block';
+        async function fetchCompanyData() {
+            const cnpj = document.getElementById('cnpjInput').value;
+            const errorDiv = document.getElementById('apiError');
+            const spinner = document.getElementById('spinner');
             
-            // SIMULAÇÃO API (Aqui entraria o fetch real que fiz no código anterior)
-            // Para demonstrar a integração, vou criar um objeto de dados simulado
-            // Na versão final, use o fetch da BrasilAPI aqui.
-            const fakeData = {
-                razao: "INDÚSTRIA EXEMPLO LTDA",
-                fantasia: "METALÚRGICA EXEMPLO",
-                cnae: "25.11-0 - Fabricação de estruturas metálicas",
-                risco: "3", // Grau de risco
-                logradouro: "Rua das Indústrias, 100",
-                bairro: "Industrial",
-                cidade: currentCity,
-                cnpj: cnpj
-            };
+            errorDiv.style.display = 'none';
+            spinner.style.display = 'inline-block';
 
-            // PREENCHE TELA
-            document.getElementById('razao').value = fakeData.razao;
-            document.getElementById('cnae').value = fakeData.cnae;
-            document.getElementById('risco').value = `Grau ${fakeData.risco}`;
-            document.getElementById('cidade').value = fakeData.cidade;
+            try {
+                const response = await fetch(`https://brasilapi.com.br/api/cnpj/v1/${cnpj}`);
+                if(!response.ok) throw new Error("CNPJ não encontrado.");
+                
+                const data = await response.json();
+                
+                // Preenchimento
+                document.getElementById('razaoSocial').value = data.razao_social;
+                document.getElementById('cnaeCode').value = data.cnae_fiscal;
+                
+                // Lógica de Risco (Simplificada para o exemplo, mas funcional)
+                const risco = data.cnae_fiscal.toString().startsWith('45') ? 3 : 2;
+                const rDisplay = document.getElementById('riskDisplay');
+                rDisplay.innerText = "GRAU " + risco;
+                rDisplay.className = "badge bg-risk-" + (risco > 2 ? '3' : '2');
 
-            // *** O SEGREDO DO SUCESSO: LOCALSTORAGE ***
-            // Salva os dados na "memória do celular" para o PCMSO usar depois
-            localStorage.setItem('anda_company_data', JSON.stringify(fakeData));
-            
-            // Sugestão Automática de Risco (Logica do app anterior)
-            document.getElementById('pgr-riscos').value = "Ruído contínuo; Radiação não ionizante (Solda); Fumos metálicos.";
-        }
+                // Persistência para os outros módulos
+                localStorage.setItem('anda_company_data', JSON.stringify({
+                    razao: data.razao_social,
+                    cnpj: cnpj,
+                    cnae: data.cnae_fiscal,
+                    risco: risco,
+                    cidade: selectedCity,
+                    endereco: `${data.logradouro}, ${data.numero} - ${data.municipio}`
+                }));
 
-        function savePGRData() {
-            const riscos = document.getElementById('pgr-riscos').value;
-            // Atualiza o cache com os riscos
-            let data = JSON.parse(localStorage.getItem('anda_company_data') || '{}');
-            data.riscos = riscos;
-            localStorage.setItem('anda_company_data', JSON.stringify(data));
-            
-            const btn = document.querySelector('.btn-purple');
-            btn.innerText = "DADOS SINCRONIZADOS!";
-            setTimeout(() => btn.innerText = "SALVAR INVENTÁRIO (PGR)", 2000);
+                document.getElementById('resultArea').style.display = 'block';
+            } catch (err) {
+                errorDiv.innerText = "Erro ao validar CNPJ. Verifique a conexão ou o número.";
+                errorDiv.style.display = 'block';
+            } finally {
+                spinner.style.display = 'none';
+            }
         }
     </script>
 </body>
