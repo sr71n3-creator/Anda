@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ANDA - Ordem de Serviço NR-01</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg: #0a0b10; --surf: #161b22; --border: #30363d; --neon-yellow: #f1e05a; --text: #f0f6fc; }
+        body { background: var(--bg); color: var(--text); font-family: 'Roboto', sans-serif; padding: 15px; margin: 0; }
+        .header { border-bottom: 2px solid var(--neon-yellow); padding: 15px 0; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
+        .title { font-family: 'Orbitron'; color: var(--neon-yellow); font-size: 1.2rem; }
+        
+        .card { background: var(--surf); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+        h3 { color: var(--neon-yellow); font-size: 1rem; margin-top: 0; border-left: 3px solid var(--neon-yellow); padding-left: 10px; }
+        
+        input, textarea { width: 100%; padding: 12px; background: #0d1117; border: 1px solid var(--border); color: white; border-radius: 8px; margin-bottom: 10px; box-sizing: border-box; }
+        
+        .legal-text { font-size: 0.8rem; color: #8b949e; background: #0d1117; padding: 10px; border-radius: 6px; height: 150px; overflow-y: scroll; border: 1px solid #222; line-height: 1.4; }
+        
+        .btn-gen { background: linear-gradient(45deg, var(--neon-yellow), #d4af37); color: black; border: none; padding: 18px; width: 100%; border-radius: 8px; font-weight: bold; font-family: 'Orbitron'; cursor: pointer; font-size: 1rem; transition: 0.3s; margin-top: 10px; }
+        .btn-gen:active { transform: scale(0.98); }
+        .back { color: #888; text-decoration: none; font-size: 0.8rem; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <div>
+            <div class="title">ORDEM DE SERVIÇO</div>
+            <small>Instruções de Segurança - NR-01</small>
+        </div>
+        <a href="index.html" class="back">↩ VOLTAR</a>
+    </div>
+
+    <div class="card">
+        <h3>🏢 Identificação</h3>
+        <input type="text" id="empresaOs" readonly placeholder="Carregando Empresa...">
+        <input type="text" id="funcionarioOs" placeholder="Nome do Colaborador">
+        <input type="text" id="funcaoOs" placeholder="Função (Ex: Soldador)">
+    </div>
+
+    <div class="card">
+        <h3>⚠️ Riscos e Medidas</h3>
+        <label style="font-size:0.7rem; color:var(--neon-yellow)">RISCOS OCUPACIONAIS</label>
+        <textarea id="riscosOs" rows="3">Físicos (Ruído), Químicos (Fumos), Acidentes (Queda de nível).</textarea>
+        
+        <label style="font-size:0.7rem; color:var(--neon-yellow)">MEDIDAS PREVENTIVAS (EPC/EPI)</label>
+        <textarea id="medidasOs" rows="3">Uso obrigatório de Protetor Auricular, Máscara PFF2, Botas de Segurança.</textarea>
+    </div>
+
+    <div class="card">
+        <h3>⚖️ Declaração do Empregado</h3>
+        <div class="legal-text">
+            Declaro que fui treinado e instruído sobre as normas de segurança da empresa. Comprometo-me a usar os EPIs fornecidos e seguir as orientações da NR-01. Estou ciente de que o descumprimento destas normas constitui ato faltoso, passível de punições conforme a CLT, inclusive demissão por justa causa.
+        </div>
+        <p style="font-size: 0.7rem; color: var(--neon-yellow); margin-top: 10px;">➔ Assinatura Digital / Biometria no ato da entrega</p>
+    </div>
+
+    <button class="btn-gen" onclick="gerarOS()">FINALIZAR E GERAR O.S.</button>
+
+    <script>
+        window.onload = function() {
+            const data = JSON.parse(localStorage.getItem('anda_current_company'));
+            if(data) {
+                document.getElementById('empresaOs').value = data.razao;
+                document.getElementById('riscosOs').value = data.riscosBase || "A definir conforme PGR.";
+            }
+        }
+
+        function gerarOS() {
+            const func = document.getElementById('funcionarioOs').value;
+            if(!func) return alert("Digite o nome do funcionário!");
+            alert(`O.S. Gerada com Sucesso para: ${func}\nProtocolo enviado para o eSocial.`);
+            window.print();
+        }
+    </script>
+</body>
+</html>

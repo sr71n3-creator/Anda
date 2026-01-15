@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ANDA - PPR Digital</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg: #0a0b10; --surf: #161b22; --border: #30363d; --neon-ppr: #00fff2; --text: #f0f6fc; }
+        body { background: var(--bg); color: var(--text); font-family: 'Roboto', sans-serif; padding: 15px; margin: 0; }
+        .header { border-bottom: 2px solid var(--neon-ppr); padding: 15px 0; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
+        .title { font-family: 'Orbitron'; color: var(--neon-ppr); font-size: 1.2rem; }
+        .card { background: var(--surf); border: 1px solid var(--border); border-radius: 12px; padding: 15px; margin-bottom: 15px; }
+        label { font-size: 0.75rem; color: var(--neon-ppr); text-transform: uppercase; display: block; margin-bottom: 5px; }
+        input, select { width: 100%; padding: 12px; background: #0d1117; border: 1px solid var(--border); color: white; border-radius: 8px; margin-bottom: 10px; box-sizing: border-box; }
+        .status-fit { border: 1px solid var(--neon-ppr); padding: 10px; border-radius: 6px; text-align: center; color: var(--neon-ppr); font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div><div class="title">P.P.R. CONTROL</div><small>Proteção Respiratória (Fundacentro)</small></div>
+        <a href="index.html" style="color:#666; text-decoration:none; font-size:0.8rem;">↩ HUB</a>
+    </div>
+
+    <div class="card">
+        <label>Colaborador Selecionado</label>
+        <input type="text" placeholder="Nome do Funcionário">
+        <label>Tipo de Respirador</label>
+        <select>
+            <option>PFF2 (N95) - Descartável</option>
+            <option>Peça Semifacial com Filtro Mecânico</option>
+            <option>Peça Semifacial com Filtro Químico/Combinado</option>
+            <option>Peça Facial Inteira</option>
+        </select>
+    </div>
+
+    
+
+    <div class="card">
+        <label>Ensaio de Vedação (Fit Test)</label>
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+            <input type="date" title="Data do Ensaio">
+            <select><option>Qualitativo (Sacarina)</option><option>Quantitativo</option></select>
+        </div>
+        <div class="status-fit" style="margin-top:10px;">VEDAÇÃO: APROVADO</div>
+    </div>
+
+    <button style="background:var(--neon-ppr); color:black; width:100%; padding:20px; border-radius:10px; font-family:Orbitron; font-weight:bold; border:none; cursor:pointer;" onclick="alert('Dados de Proteção Respiratória validados.')">REGISTRAR FIT TEST</button>
+</body>
+</html>

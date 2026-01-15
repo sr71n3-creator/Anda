@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ANDA - Gerador de Certificados</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg: #0a0b10; --gold: #d4af37; --text: #f0f6fc; }
+        body { background: var(--bg); color: var(--text); font-family: 'Roboto', sans-serif; padding: 15px; margin: 0; }
+        .card-cert { background: #161b22; border: 2px solid var(--gold); border-radius: 15px; padding: 30px; text-align: center; position: relative; overflow: hidden; }
+        .cert-title { font-family: 'Orbitron'; color: var(--gold); font-size: 1.5rem; letter-spacing: 2px; }
+        .seal { width: 80px; height: 80px; background: var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: black; font-weight: bold; font-size: 0.6rem; margin: 20px auto; transform: rotate(-15deg); box-shadow: 0 0 20px rgba(212, 175, 55, 0.5); }
+        input { width: 100%; padding: 10px; background: transparent; border: none; border-bottom: 1px solid #444; color: white; text-align: center; font-size: 1.1rem; margin: 15px 0; }
+        .btn-print { background: var(--gold); color: black; border: none; padding: 15px; width: 100%; border-radius: 8px; font-weight: bold; font-family: 'Orbitron'; cursor: pointer; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <div class="card-cert">
+        <div class="cert-title">CERTIFICADO DE CAPACITAÇÃO</div>
+        <p style="font-size: 0.8rem; color: #888;">A empresa <strong id="cia">ANDA S.S.T</strong> confere a:</p>
+        <input type="text" placeholder="NOME DO ALUNO" id="aluno">
+        <p style="font-size: 0.8rem;">o certificado de conclusão do treinamento de:</p>
+        <input type="text" value="NR-35 - TRABALHO EM ALTURA">
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+            <div><small>Carga Horária</small><input type="text" value="08 Horas"></div>
+            <div><small>Data</small><input type="text" value="15/01/2026"></div>
+        </div>
+        <div class="seal">ANDA<br>QUALIDADE<br>PREMIUM</div>
+        <p style="font-size: 0.6rem; border-top: 1px solid #333; padding-top: 20px;">Assinatura do Instrutor (Registro Profissional)</p>
+    </div>
+    <button class="btn-print" onclick="window.print()">GERAR PDF PARA IMPRESSÃO</button>
+
+    <script>
+        const data = JSON.parse(localStorage.getItem('anda_current_company'));
+        if(data) document.getElementById('cia').innerText = data.razao;
+    </script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ANDA - Laudo de Insalubridade NR-15</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg: #0a0b10; --surf: #1a1a10; --border: #333300; --neon-ins: #eaff00; --text: #f0f6fc; }
+        body { background: var(--bg); color: var(--text); font-family: 'Roboto', sans-serif; padding: 15px; margin: 0; }
+        .header { border-bottom: 2px solid var(--neon-ins); padding: 15px 0; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
+        .title { font-family: 'Orbitron'; color: var(--neon-ins); font-size: 1.2rem; }
+        .card { background: var(--surf); border: 1px solid var(--border); border-radius: 12px; padding: 15px; margin-bottom: 15px; }
+        input, select { width: 100%; padding: 12px; background: #000; border: 1px solid #444; color: white; border-radius: 8px; margin-bottom: 10px; }
+        .conclusion { background: rgba(234, 255, 0, 0.1); border: 1px dashed var(--neon-ins); padding: 15px; border-radius: 8px; font-weight: bold; text-align: center; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div><div class="title">LAUDO INSALUBRE</div><small>NR-15 - Limites de Tolerância</small></div>
+        <a href="index.html" style="color:#666; text-decoration:none; font-size:0.8rem;">↩ HUB</a>
+    </div>
+
+    <div class="card">
+        <label style="color:var(--neon-ins); font-size:0.7rem;">AGENTE AVALIADO</label>
+        <select id="agente">
+            <option>Ruído Contínuo (Anexo 1)</option>
+            <option>Calor (Anexo 3)</option>
+            <option>Agentes Químicos (Anexo 11/13)</option>
+            <option>Agentes Biológicos (Anexo 14)</option>
+        </select>
+        <label style="color:var(--neon-ins); font-size:0.7rem;">VALOR MEDIDO</label>
+        <input type="text" placeholder="Ex: 88 dB(A)">
+    </div>
+
+    <div class="card">
+        <label style="color:var(--neon-ins); font-size:0.7rem;">O EPI NEUTRALIZA O RISCO?</label>
+        <select><option>SIM (Insalubridade ELIMINADA)</option><option>NÃO (Insalubridade DEVIDA)</option></select>
+    </div>
+
+    <div class="conclusion">
+        PERCENTUAL DEVIDO: <span id="percent">0%</span>
+    </div>
+
+    <button style="background:var(--neon-ins); color:black; width:100%; padding:20px; border-radius:10px; font-family:Orbitron; margin-top:20px; font-weight:bold; border:none; cursor:pointer;" onclick="alert('Laudo Técnico Concluído conforme NR-15.')">ASSINAR E GERAR LAUDO</button>
+</body>
+</html>

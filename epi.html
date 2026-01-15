@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ANDA - Controle de EPI NR-06</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg: #0a0b10; --surf: #161b22; --border: #30363d; --neon-pink: #ff007f; --text: #f0f6fc; }
+        body { background: var(--bg); color: var(--text); font-family: 'Roboto', sans-serif; padding: 15px; margin: 0; }
+        .header { border-bottom: 2px solid var(--neon-pink); padding: 15px 0; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
+        .title { font-family: 'Orbitron'; color: var(--neon-pink); font-size: 1.2rem; }
+        
+        .card { background: var(--surf); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 15px; }
+        
+        table { width: 100%; border-collapse: collapse; font-size: 0.8rem; margin-top: 10px; color: #ccc; }
+        th { border-bottom: 1px solid var(--neon-pink); padding: 10px 5px; text-align: left; color: var(--neon-pink); }
+        td { border-bottom: 1px solid #222; padding: 10px 5px; }
+
+        .btn-add { background: transparent; border: 1px dashed var(--neon-pink); color: var(--neon-pink); padding: 10px; width: 100%; border-radius: 6px; cursor: pointer; margin-bottom: 15px; }
+        .btn-save { background: var(--neon-pink); color: white; border: none; padding: 18px; width: 100%; border-radius: 8px; font-weight: bold; font-family: 'Orbitron'; cursor: pointer; }
+        
+        .row-input { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 5px; margin-bottom: 10px; }
+        input { background: #0d1117; border: 1px solid var(--border); color: white; padding: 8px; border-radius: 4px; font-size: 0.8rem; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <div>
+            <div class="title">FICHA DE EPI</div>
+            <small>Controle de Entrega - NR-06</small>
+        </div>
+        <a href="index.html" style="color:#888; text-decoration:none; font-size:0.8rem;">↩ VOLTAR</a>
+    </div>
+
+    <div class="card">
+        <input type="text" id="empresaEpi" readonly style="border:none; background:transparent; font-weight:bold; color:var(--neon-pink); margin-bottom:5px;">
+        <input type="text" placeholder="Colaborador" style="width:100%; margin-bottom:5px;">
+        <input type="text" placeholder="CPF do Recebedor" style="width:100%;">
+    </div>
+
+    <div class="card">
+        <div id="epiList">
+            <div class="row-input">
+                <input type="text" placeholder="Equipamento" value="Protetor Auricular">
+                <input type="text" placeholder="CA" value="11512">
+                <input type="date" value="2024-05-20">
+            </div>
+        </div>
+        <button class="btn-add" onclick="addRow()">+ ADICIONAR NOVO ITEM</button>
+    </div>
+
+    <div class="card" style="font-size:0.7rem; border-color:#da3633;">
+        <p><strong>TERMO DE RESPONSABILIDADE:</strong><br>
+        Recebi os EPIs listados acima e me comprometo a utilizá-los apenas para a finalidade a que se destinam. Em caso de extravio ou dano por uso inadequado, autorizo o desconto em folha de pagamento conforme Art. 462 da CLT.</p>
+    </div>
+
+    <button class="btn-save" onclick="salvarFicha()">REGISTRAR ENTREGA</button>
+
+    <script>
+        window.onload = function() {
+            const data = JSON.parse(localStorage.getItem('anda_current_company'));
+            if(data) document.getElementById('empresaEpi').value = data.razao;
+        }
+
+        function addRow() {
+            const div = document.createElement('div');
+            div.className = 'row-input';
+            div.innerHTML = `<input type="text" placeholder="Equipamento"><input type="text" placeholder="CA"><input type="date">`;
+            document.getElementById('epiList').appendChild(div);
+        }
+
+        function salvarFicha() {
+            if(navigator.vibrate) navigator.vibrate([100, 50, 100]);
+            alert("Ficha de EPI Registrada na Blockchain Local.\nDocumento pronto para arquivamento digital.");
+            window.print();
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ANDA - Laudo NR-10</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg: #0a0b10; --surf: #1a1a0a; --border: #3d3d20; --neon-elec: #ffea00; --text: #f0f6fc; }
+        body { background: var(--bg); color: var(--text); font-family: 'Roboto', sans-serif; padding: 15px; margin: 0; }
+        .header { border-bottom: 2px solid var(--neon-elec); padding: 15px 0; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
+        .title { font-family: 'Orbitron'; color: var(--neon-elec); font-size: 1.1rem; }
+        .inspect-row { display: flex; justify-content: space-between; padding: 12px; background: #000; border-radius: 8px; margin-bottom: 10px; border: 1px solid #222; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div><div class="title">LAUDO ELÉTRICO</div><small>NR-10 - Prontuário de Instalações</small></div>
+        <a href="index.html" style="color:#666; text-decoration:none; font-size:0.8rem;">↩ HUB</a>
+    </div>
+
+    
+
+    <div class="card" style="padding:15px; background:var(--surf); border-radius:12px;">
+        <label style="color:var(--neon-elec); font-size:0.7rem;">CHECKLIST TÉCNICO</label>
+        <div class="inspect-row"><span>Esquemas Unifilares Atualizados?</span><input type="checkbox"></div>
+        <div class="inspect-row"><span>Barreiras e Invólucros íntegros?</span><input type="checkbox"></div>
+        <div class="inspect-row"><span>Aterramento Medido (Ω)?</span><input type="text" style="width:50px; background:#111; border:none; color:white;"></div>
+        <div class="inspect-row"><span>EPIs dielétricos válidos?</span><input type="checkbox"></div>
+    </div>
+
+    <div style="margin-top:15px; padding:15px; border: 1px dashed var(--neon-elec); text-align:center;">
+        <small style="color:var(--neon-elec)">⚠️ STATUS DO PRONTUÁRIO</small><br>
+        <strong style="font-size:1.2rem;">EM CONFORMIDADE</strong>
+    </div>
+
+    <button style="width:100%; padding:18px; background:var(--neon-elec); color:black; border:none; border-radius:10px; font-family:Orbitron; font-weight:bold; margin-top:20px;">ASSINAR LAUDO (ENG. ELETRICISTA)</button>
+</body>
+</html>

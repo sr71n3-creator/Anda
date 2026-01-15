@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ANDA - Emissor de CAT Digital</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg: #0a0b10; --surf: #161b22; --border: #30363d; --neon-cat: #ff6a00; --text: #f0f6fc; }
+        body { background: var(--bg); color: var(--text); font-family: 'Roboto', sans-serif; padding: 15px; margin: 0; }
+        .header { border-bottom: 2px solid var(--neon-cat); padding: 15px 0; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
+        .title { font-family: 'Orbitron'; color: var(--neon-cat); font-size: 1.2rem; }
+        .card { background: var(--surf); border: 1px solid var(--border); border-radius: 12px; padding: 15px; margin-bottom: 15px; }
+        label { font-size: 0.75rem; color: var(--neon-cat); text-transform: uppercase; display: block; margin-bottom: 5px; }
+        input, select, textarea { width: 100%; padding: 12px; background: #0d1117; border: 1px solid var(--border); color: white; border-radius: 8px; margin-bottom: 10px; box-sizing: border-box; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .btn-send { background: linear-gradient(45deg, var(--neon-cat), #ff2e00); color: white; border: none; padding: 18px; width: 100%; border-radius: 10px; font-weight: bold; font-family: 'Orbitron'; cursor: pointer; box-shadow: 0 4px 15px rgba(255, 106, 0, 0.3); }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div><div class="title">CAT DIGITAL</div><small>Comunicação de Acidente de Trabalho</small></div>
+        <a href="index.html" style="color:#666; text-decoration:none; font-size:0.8rem;">↩ HUB</a>
+    </div>
+
+    <div class="card">
+        <label>Empresa Empregadora</label>
+        <input type="text" id="empresaCat" readonly style="color:var(--neon-cat); font-weight:bold;">
+        <label>Nome do Acidentado</label>
+        <input type="text" placeholder="Nome Completo">
+        <div class="grid-2">
+            <div><label>Data do Acidente</label><input type="date"></div>
+            <div><label>Hora</label><input type="time"></div>
+        </div>
+    </div>
+
+    <div class="card">
+        <label>Tipo de Acidente</label>
+        <select>
+            <option>Típico</option>
+            <option>Trajeto</option>
+            <option>Doença Ocupacional</option>
+        </select>
+        <label>Parte do Corpo Atingida</label>
+        <input type="text" placeholder="Ex: Membro Superior Direito">
+        <label>Agente Causador</label>
+        <input type="text" placeholder="Ex: Máquina de Corte / Piso Escorregadio">
+    </div>
+
+    <button class="btn-send" onclick="alert('CAT Estruturada para envio ao eSocial S-2210.')">GERAR PROTOCOLO CAT</button>
+
+    <script>
+        window.onload = function() {
+            const data = JSON.parse(localStorage.getItem('anda_current_company'));
+            if(data) document.getElementById('empresaCat').value = data.razao;
+        }
+    </script>
+</body>
+</html>

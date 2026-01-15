@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ANDA - Laudo Ergonômico AET</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg: #0a0b10; --surf: #161b22; --border: #30363d; --neon-aet: #00d4ff; --text: #f0f6fc; }
+        body { background: var(--bg); color: var(--text); font-family: 'Roboto', sans-serif; padding: 15px; margin: 0; }
+        .header { border-bottom: 2px solid var(--neon-aet); padding: 15px 0; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
+        .title { font-family: 'Orbitron'; color: var(--neon-aet); font-size: 1.2rem; }
+        .card { background: var(--surf); border: 1px solid var(--border); border-radius: 12px; padding: 15px; margin-bottom: 15px; }
+        h3 { font-size: 0.8rem; color: var(--neon-aet); border-left: 3px solid var(--neon-aet); padding-left: 10px; }
+        input, select, textarea { width: 100%; padding: 12px; background: #0d1117; border: 1px solid var(--border); color: white; border-radius: 8px; margin-bottom: 10px; box-sizing: border-box; }
+        .metric-bar { height: 10px; background: #222; border-radius: 5px; margin: 10px 0; overflow: hidden; }
+        .metric-fill { height: 100%; background: var(--neon-aet); width: 50%; }
+        .btn-aet { background: var(--neon-aet); color: #000; border: none; padding: 18px; width: 100%; border-radius: 10px; font-weight: bold; font-family: 'Orbitron'; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div><div class="title">A.E.T. PRO</div><small>NR-17 - Análise Ergonômica</small></div>
+        <a href="index.html" style="color:#666; text-decoration:none; font-size:0.8rem;">↩ HUB</a>
+    </div>
+
+    <div class="card">
+        <h3>1. Posto de Trabalho</h3>
+        <input type="text" placeholder="Setor / Departamento">
+        <textarea rows="3" placeholder="Descrição da Atividade (Levantamento, Transporte, Postura...)"></textarea>
+    </div>
+
+    <div class="card">
+        <h3>2. Avaliação de Sobrecarga</h3>
+        <label style="font-size:0.7rem;">Carga Física (Biomecânica)</label>
+        <select><option>Baixa</option><option>Moderada</option><option>Crítica (RULA/REBA)</option></select>
+        <label style="font-size:0.7rem; margin-top:10px; display:block;">Carga Cognitiva (Mental)</label>
+        <select><option>Baixa</option><option>Alta Pressão</option><option>Monotonia Excessiva</option></select>
+    </div>
+
+    <div class="card">
+        <h3>3. Sugestões de Melhoria</h3>
+        <textarea rows="3" placeholder="Ex: Substituição de mobiliário, Rodízio de tarefas..."></textarea>
+    </div>
+
+    <button class="btn-aet" onclick="window.print()">CONCLUIR ANÁLISE ERGONÔMICA</button>
+</body>
+</html>

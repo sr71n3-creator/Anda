@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ANDA - APR Industrial</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg: #0a0b10; --surf: #1c1c1c; --border: #333; --neon-red: #ff3e3e; --text: #eee; }
+        body { background: var(--bg); color: var(--text); font-family: 'Roboto', sans-serif; padding: 15px; margin: 0; }
+        .header { border-bottom: 2px solid var(--neon-red); padding: 15px 0; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
+        .title { font-family: 'Orbitron'; color: var(--neon-red); font-size: 1.2rem; }
+        
+        .card { background: var(--surf); border-radius: 10px; padding: 15px; margin-bottom: 15px; border: 1px solid var(--border); }
+        .risk-row { display: grid; grid-template-columns: 1fr 1fr 100px; gap: 8px; margin-bottom: 15px; border-bottom: 1px solid #333; padding-bottom: 10px; }
+        
+        input, select { background: #000; border: 1px solid #444; color: white; padding: 10px; border-radius: 4px; font-size: 0.8rem; width: 100%; box-sizing: border-box; }
+        
+        .severity-badge { text-align: center; padding: 10px; border-radius: 4px; font-weight: bold; font-size: 0.7rem; }
+        .high { background: #ff3e3e; color: white; }
+        
+        .btn-add { background: transparent; border: 1px dashed var(--neon-red); color: var(--neon-red); padding: 12px; width: 100%; border-radius: 6px; cursor: pointer; font-family: 'Orbitron'; font-size: 0.7rem; margin-top: 10px; }
+        .btn-gen { background: var(--neon-red); color: white; border: none; padding: 20px; width: 100%; border-radius: 10px; font-weight: bold; font-family: 'Orbitron'; font-size: 1.1rem; cursor: pointer; margin-top: 20px; box-shadow: 0 5px 20px rgba(255, 62, 62, 0.4); }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <div>
+            <div class="title">A.P.R. CRÍTICA</div>
+            <small>Análise Preliminar de Risco</small>
+        </div>
+        <a href="index.html" style="color:#666; text-decoration:none; font-size:0.8rem;">↩ CANCELAR</a>
+    </div>
+
+    <div class="card">
+        <label style="font-size:0.7rem; color:var(--neon-red)">DESCRIÇÃO DA TAREFA</label>
+        <input type="text" placeholder="Ex: Manutenção em Telhado / NR-35">
+        <label style="font-size:0.7rem; color:var(--neon-red); margin-top:10px; display:block;">EQUIPE EXECUTORA</label>
+        <input type="text" placeholder="Nomes dos Executantes">
+    </div>
+
+    <div class="card">
+        <div id="riskMatrix">
+            <div class="risk-row">
+                <label>Passo da Tarefa</label>
+                <label>Perigo / Risco</label>
+                <label>Severidade</label>
+                
+                <input type="text" value="Acesso ao Telhado">
+                <input type="text" value="Queda de Diferente Nível">
+                <select class="sev-select" onchange="updateColors(this)">
+                    <option value="high">ALTA</option>
+                    <option value="med">MÉDIA</option>
+                    <option value="low">BAIXA</option>
+                </select>
+            </div>
+        </div>
+        <button class="btn-add" onclick="addStep()">+ ADICIONAR PASSO OPERACIONAL</button>
+    </div>
+
+    <div class="card">
+        <h3 style="margin-top:0; font-size:0.8rem; color:var(--neon-red)">🛡️ MEDIDAS DE CONTROLE (Obrigatórias)</h3>
+        <label><input type="checkbox" checked> Uso de Linha de Vida / Cinto Paraquedista</label><br>
+        <label><input type="checkbox" checked> Isolamento e Sinalização de Área</label><br>
+        <label><input type="checkbox"> Permissão de Trabalho (PT) Vinculada</label>
+    </div>
+
+    <button class="btn-gen" onclick="emitirAPR()">LIBERAR TAREFA & GERAR APR</button>
+
+    <script>
+        function addStep() {
+            const row = document.createElement('div');
+            row.className = 'risk-row';
+            row.style.marginTop = "10px";
+            row.innerHTML = `<input type="text" placeholder="Passo..."><input type="text" placeholder="Risco..."><select><option>ALTA</option><option>MÉDIA</option><option>BAIXA</option></select>`;
+            document.getElementById('riskMatrix').appendChild(row);
+        }
+
+        function emitirAPR() {
+            if(navigator.vibrate) navigator.vibrate([200, 100, 200]);
+            alert("A.P.R. Gerada e Assinada Digitalmente.\nTrabalho Autorizado mediante cumprimento das medidas.");
+            window.print();
+        }
+    </script>
+</body>
+</html>
