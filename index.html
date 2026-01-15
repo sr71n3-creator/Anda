@@ -3,131 +3,141 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ANDA - Sistema Integrado SST</title>
+    <title>ANDA - Sistema de Engenharia SST Premium</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
     <style>
+        /* --- DESIGN SYSTEM "ANDA" v3.0 (PREMIUM DARK) --- */
         :root {
             --bg-dark: #0a0b10;
-            --surface-dark: #161b22;
-            --surface-light: #21262d;
-            --primary-neon: #00ff9d; 
-            --secondary-neon: #bd34fe; 
+            --surface: #161b22;
+            --primary-neon: #00ff9d; /* Verde Araucária */
+            --secondary-neon: #bd34fe; /* Roxo Amanda */
             --text-main: #f0f6fc;
-            --text-dim: #8b949e;
             --border: #30363d;
-            --danger: #da3633;
-            --success: #238636;
+            --danger: #f85149;
         }
-
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
         body {
             font-family: 'Roboto', sans-serif;
             background-color: var(--bg-dark);
             color: var(--text-main);
-            margin: 0; padding: 0;
-            line-height: 1.6;
-            overflow-x: hidden;
+            margin: 0;
+            padding-bottom: 50px;
         }
 
-        /* HEADER PREMIUM RESTAURADO */
+        /* HEADER PREMIUM REESTILIZADO */
         header {
             background: rgba(22, 27, 34, 0.98);
-            border-bottom: 2px solid var(--primary-neon);
-            padding: 15px 20px;
+            border-bottom: 1px solid var(--primary-neon);
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.8);
             position: sticky; top: 0; z-index: 1000;
-            display: flex; align-items: center; justify-content: space-between;
-            box-shadow: 0 4px 30px rgba(0,0,0,0.5);
         }
 
         .brand-wrapper { display: flex; align-items: center; gap: 15px; }
-
         .brand-name {
             font-family: 'Orbitron', sans-serif;
-            font-size: 1.8rem; font-weight: 700; letter-spacing: 4px;
+            font-size: 1.8rem;
+            font-weight: 700;
+            letter-spacing: 4px;
             background: linear-gradient(90deg, #fff, var(--primary-neon));
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             text-transform: uppercase;
         }
 
-        .logo-svg {
-            width: 45px; height: 45px;
-            filter: drop-shadow(0 0 8px var(--primary-neon));
+        .logo-svg { width: 50px; height: 50px; filter: drop-shadow(0 0 10px var(--primary-neon)); }
+
+        .container { max-width: 1000px; margin: 30px auto; padding: 0 20px; }
+
+        /* CARDS E INPUTS */
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            position: relative;
+            overflow: hidden;
         }
 
-        /* SELETOR DE CIDADE */
-        #city-selector {
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            height: 90vh; text-align: center;
+        .card::before {
+            content: ''; position: absolute; top:0; left:0; width: 100%; height: 2px;
+            background: linear-gradient(90deg, var(--primary-neon), var(--secondary-neon));
         }
 
-        .city-card {
-            background: var(--surface-light);
-            border: 1px solid var(--primary-neon);
-            padding: 30px 60px; border-radius: 50px;
-            cursor: pointer; transition: 0.4s;
-            font-family: 'Orbitron'; color: var(--primary-neon);
-            text-transform: uppercase; letter-spacing: 2px;
-            box-shadow: 0 0 15px rgba(0, 255, 157, 0.1);
-        }
-
-        .city-card:hover {
-            background: var(--primary-neon); color: #000;
-            box-shadow: 0 0 30px var(--primary-neon);
-        }
-
-        /* CONTAINER PRINCIPAL */
-        #app-container { display: none; max-width: 900px; margin: 20px auto; padding: 0 20px; }
-
-        .section-title {
-            color: var(--primary-neon); font-family: 'Orbitron';
-            border-bottom: 1px solid var(--border);
-            padding-bottom: 10px; margin-top: 30px;
-        }
-
-        .input-group {
-            background: var(--surface-dark); border: 1px solid var(--border);
-            padding: 20px; border-radius: 12px; margin-bottom: 20px;
-        }
-
-        input, textarea, select {
+        label { color: var(--primary-neon); font-size: 0.8rem; font-weight: bold; text-transform: uppercase; display: block; margin-bottom: 8px; }
+        
+        input {
             width: 100%; background: #0d1117; border: 1px solid var(--border);
-            color: white; padding: 14px; border-radius: 8px; margin-top: 10px;
-            font-size: 1rem;
+            color: white; padding: 14px; border-radius: 8px; font-size: 1rem; transition: 0.3s;
         }
+
+        input:focus { border-color: var(--secondary-neon); outline: none; box-shadow: 0 0 10px rgba(189, 52, 254, 0.2); }
 
         .btn-validate {
             background: linear-gradient(45deg, var(--primary-neon), #02b683);
-            color: #000; border: none; padding: 15px; border-radius: 8px;
-            font-weight: bold; width: 100%; margin-top: 15px; cursor: pointer;
-            font-family: 'Orbitron'; text-transform: uppercase;
+            color: #000; border: none; padding: 16px; border-radius: 8px;
+            font-weight: bold; cursor: pointer; width: 100%; margin-top: 15px;
+            font-family: 'Orbitron'; letter-spacing: 1px; transition: 0.3s;
         }
 
-        /* GRID DE DOCUMENTOS - ESTILO PREMIUM */
+        .btn-validate:hover { transform: scale(1.02); box-shadow: 0 0 20px rgba(0, 255, 157, 0.4); }
+
+        /* GRID DE DOCUMENTOS (O SEU PEDIDO) */
         .doc-grid {
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-            gap: 15px; margin-top: 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 15px;
+            margin-top: 30px;
         }
 
         .doc-item {
-            background: var(--surface-light); border: 1px solid var(--border);
-            padding: 20px 10px; border-radius: 12px; text-align: center;
-            cursor: pointer; transition: 0.3s;
+            background: #1c2128;
+            border: 1px solid var(--border);
+            padding: 20px 10px;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
         }
 
-        .doc-item:hover { border-color: var(--secondary-neon); transform: translateY(-3px); }
-        .doc-item.active { border-color: var(--secondary-neon); background: rgba(189, 52, 254, 0.05); }
-        .doc-item span { display: block; font-size: 0.7rem; font-weight: bold; margin-top: 8px; color: var(--text-dim); }
+        .doc-item:hover {
+            border-color: var(--secondary-neon);
+            background: #2d333b;
+            transform: translateY(-5px);
+        }
 
-        .badge { display: inline-block; padding: 5px 15px; border-radius: 4px; font-weight: bold; margin-top: 10px; }
-        .bg-risk-3 { background: var(--danger); color: white; }
+        .doc-item.active {
+            border: 1px solid var(--primary-neon);
+            background: rgba(0, 255, 157, 0.05);
+        }
 
+        .doc-item i { font-size: 1.5rem; color: var(--secondary-neon); }
+        .doc-item span { font-size: 0.75rem; font-weight: bold; text-transform: uppercase; color: #8b949e; }
+        .doc-item.active span { color: var(--primary-neon); }
+
+        /* STATUS BADGE */
+        .badge-risk {
+            padding: 10px; border-radius: 6px; font-weight: bold; text-align: center; margin-top: 10px;
+        }
+        .risk-3 { background: #f85149; color: white; }
+        .risk-2 { background: #e3b341; color: black; }
+        
         .loader {
             border: 3px solid #f3f3f3; border-top: 3px solid var(--secondary-neon);
             border-radius: 50%; width: 20px; height: 20px; animation: spin 1s linear infinite;
             display: none; margin: 0 auto;
         }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
     </style>
 </head>
 <body>
@@ -137,130 +147,156 @@
             <svg class="logo-svg" viewBox="0 0 100 100">
                 <path d="M50 15 L20 85 L35 85 L50 50 L65 85 L80 85 Z" fill="none" stroke="#00ff9d" stroke-width="4" stroke-linejoin="round"/>
                 <path d="M50 35 L50 75" stroke="#bd34fe" stroke-width="3" stroke-linecap="round"/> 
-                <circle cx="50" cy="15" r="3" fill="#00ff9d" />
+                <circle cx="50" cy="15" r="4" fill="#00ff9d" />
             </svg>
             <span class="brand-name">Anda</span>
         </div>
-        <div id="city-badge" style="color: var(--primary-neon); font-family: 'Orbitron'; font-size: 0.8rem;"></div>
+        <div id="city-tag" style="font-family:'Orbitron'; font-size: 0.8rem; color: var(--secondary-neon);">SST PREMIUM v3.0</div>
     </header>
 
-    <div id="city-selector">
-        <h2 style="font-family:'Orbitron'; margin-bottom: 30px;">Selecione a Unidade</h2>
-        <div class="city-card" onclick="initApp('Araucária')">Araucária / PR</div>
-        <p style="color:var(--text-dim); margin-top:20px;" onclick="initApp('Contenda')">ou Contenda / PR</p>
-    </div>
-
-    <div id="app-container">
-        <h2 class="section-title">Validação Legal (Receita Federal)</h2>
-        <div class="input-group">
-            <label>CNPJ da Empresa</label>
-            <input type="number" id="cnpjInput" placeholder="00000000000000">
+    <div class="container">
+        <div class="card">
+            <label>Identificação do Estabelecimento (CNPJ)</label>
+            <input type="number" id="cnpjInput" placeholder="Digite apenas os números do CNPJ">
             <button class="btn-validate" onclick="fetchCompanyData()">
-                <div id="spinner" class="loader"></div>
-                Validar e Sincronizar
+                <div id="spinner" class="loader"></div> VALIDAR EMPRESA NO SISTEMA
             </button>
-            <div id="apiError" style="color:var(--danger); display:none; margin-top:10px; font-size:0.8rem;"></div>
+            <div id="apiError" style="color:var(--danger); font-size:0.8rem; margin-top:10px; display:none;"></div>
         </div>
 
-        <div id="resultArea" style="display:none;">
-            <div class="input-group">
-                <label>Razão Social</label>
-                <input type="text" id="razaoSocial" readonly>
-                
-                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
-                    <div>
-                        <label>CNAE</label>
-                        <input type="text" id="cnaeCode" readonly>
-                    </div>
-                    <div>
-                        <label>Risco (NR-04)</label>
-                        <div id="riskDisplay" class="badge">-</div>
-                    </div>
+        <div id="resultCard" class="card" style="display:none;">
+            <label>Razão Social</label>
+            <input type="text" id="razaoSocial" readonly>
+            
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px; margin-top:15px;">
+                <div>
+                    <label>CNAE Principal</label>
+                    <input type="text" id="cnaeCode" readonly>
+                </div>
+                <div>
+                    <label>Grau de Risco (NR-04)</label>
+                    <div id="riskDisplay" class="badge-risk">Calculando...</div>
                 </div>
             </div>
 
-            <h2 class="section-title">Central de Documentos Integrados</h2>
-            <p style="font-size: 0.8rem; color: var(--text-dim);">Clique para abrir o módulo específico. Os dados acima serão importados automaticamente.</p>
+            <label style="margin-top:15px;">Descrição da Atividade</label>
+            <input type="text" id="cnaeDesc" readonly>
             
-            <div class="doc-grid" id="docGrid">
-                </div>
+            <label style="margin-top:15px;">Localização Validada</label>
+            <input type="text" id="endereco" readonly>
+        </div>
+
+        <h3 style="font-family:'Orbitron'; color:var(--text-main); margin-top:40px; border-left:4px solid var(--secondary-neon); padding-left:15px;">CENTRAL DE DOCUMENTOS</h3>
+        <p style="color:#8b949e; font-size:0.85rem;">Selecione o documento para preenchimento inteligente baseado nos dados acima.</p>
+
+        <div class="doc-grid">
+            <div class="doc-item active" onclick="goToDoc('pgr')">
+                <i>📄</i>
+                <span>PGR</span>
+            </div>
+            <div class="doc-item active" onclick="goToDoc('pcmso')">
+                <i>🏥</i>
+                <span>PCMSO</span>
+            </div>
+            <div class="doc-item active" onclick="goToDoc('ltcat')">
+                <i>⚖️</i>
+                <span>LTCAT</span>
+            </div>
+            <div class="doc-item active" onclick="goToDoc('aso')">
+                <i>🩺</i>
+                <span>ASO</span>
+            </div>
+            
+            <div class="doc-item" onclick="comingSoon('AET')"><i>💺</i><span>AET</span></div>
+            <div class="doc-item" onclick="comingSoon('PPP')"><i>📑</i><span>PPP</span></div>
+            <div class="doc-item" onclick="comingSoon('CAT')"><i>⚠️</i><span>CAT</span></div>
+            <div class="doc-item" onclick="comingSoon('OS')"><i>📝</i><span>O.S.</span></div>
+            <div class="doc-item" onclick="comingSoon('EPI')"><i>🦺</i><span>Ficha EPI</span></div>
+            <div class="doc-item" onclick="comingSoon('Insalubridade')"><i>🧪</i><span>Insalub.</span></div>
+            <div class="doc-item" onclick="comingSoon('Periculosidade')"><i>💥</i><span>Pericul.</span></div>
+            <div class="doc-item" onclick="comingSoon('PCA')"><i>👂</i><span>PCA</span></div>
+            <div class="doc-item" onclick="comingSoon('PPR')"><i>🎭</i><span>PPR</span></div>
+            <div class="doc-item" onclick="comingSoon('APR')"><i>🔍</i><span>APR</span></div>
+            <div class="doc-item" onclick="comingSoon('NR-10')"><i>⚡</i><span>NR-10</span></div>
+            <div class="doc-item" onclick="comingSoon('NR-12')"><i>⚙️</i><span>NR-12</span></div>
+            <div class="doc-item" onclick="comingSoon('NR-20')"><i>⛽</i><span>NR-20</span></div>
+            <div class="doc-item" onclick="comingSoon('Radiológica')"><i>☢️</i><span>Radiológ.</span></div>
+            <div class="doc-item" onclick="comingSoon('Resgate')"><i>🚁</i><span>Resgate</span></div>
         </div>
     </div>
 
     <script>
-        const docs = ["PGR", "PCMSO", "LTCAT", "ASO", "AET", "PPP", "CAT", "Ficha EPI", "Ordem de Serviço", "Insalubridade", "Periculosidade", "Treinamentos", "Mapa de Riscos"];
-        let selectedCity = "";
-
-        function initApp(city) {
-            selectedCity = city;
-            document.getElementById('city-selector').style.display = 'none';
-            document.getElementById('app-container').style.display = 'block';
-            document.getElementById('city-badge').innerText = city.toUpperCase();
-            renderDocs();
-        }
-
-        function renderDocs() {
-            const grid = document.getElementById('docGrid');
-            docs.forEach(doc => {
-                const div = document.createElement('div');
-                div.className = 'doc-item';
-                if(doc === "PCMSO" || doc === "LTCAT" || doc === "ASO") div.classList.add('active');
-                div.innerHTML = `<div style="font-size:1.5rem">📄</div><span>${doc}</span>`;
-                
-                div.onclick = () => {
-                    if(doc === "PCMSO" || doc === "LTCAT" || doc === "ASO") {
-                        // Navega para o arquivo específico
-                        const file = doc.toLowerCase().replace(" ", "") + ".html";
-                        window.location.href = file;
-                    } else {
-                        alert("Módulo " + doc + " em fase de certificação.");
-                    }
-                };
-                grid.appendChild(div);
-            });
-        }
+        const riskMap = {
+            '01': 3, '05': 4, '41': 3, '42': 4, '43': 3, '452': 3, '62': 1, 'default': 2
+        };
 
         async function fetchCompanyData() {
-            const cnpj = document.getElementById('cnpjInput').value;
-            const errorDiv = document.getElementById('apiError');
+            const cnpj = document.getElementById('cnpjInput').value.replace(/\D/g,'');
             const spinner = document.getElementById('spinner');
-            
-            errorDiv.style.display = 'none';
-            spinner.style.display = 'inline-block';
+            const errorDiv = document.getElementById('apiError');
+
+            if(cnpj.length !== 14) {
+                errorDiv.innerText = "CNPJ deve ter 14 dígitos.";
+                errorDiv.style.display = "block";
+                return;
+            }
+
+            errorDiv.style.display = "none";
+            spinner.style.display = "inline-block";
 
             try {
                 const response = await fetch(`https://brasilapi.com.br/api/cnpj/v1/${cnpj}`);
                 if(!response.ok) throw new Error("CNPJ não encontrado.");
                 
                 const data = await response.json();
-                
-                // Preenchimento
+
+                // Preencher campos
                 document.getElementById('razaoSocial').value = data.razao_social;
                 document.getElementById('cnaeCode').value = data.cnae_fiscal;
-                
-                // Lógica de Risco (Simplificada para o exemplo, mas funcional)
-                const risco = data.cnae_fiscal.toString().startsWith('45') ? 3 : 2;
-                const rDisplay = document.getElementById('riskDisplay');
-                rDisplay.innerText = "GRAU " + risco;
-                rDisplay.className = "badge bg-risk-" + (risco > 2 ? '3' : '2');
+                document.getElementById('cnaeDesc').value = data.cnae_fiscal_descricao;
+                document.getElementById('endereco').value = `${data.logradouro}, ${data.numero} - ${data.municipio}/${data.uf}`;
 
-                // Persistência para os outros módulos
-                localStorage.setItem('anda_company_data', JSON.stringify({
+                // Calcular Risco
+                const cnaeInic = data.cnae_fiscal.toString().substring(0, 2);
+                const risco = riskMap[cnaeInic] || riskMap['default'];
+                
+                const rDisplay = document.getElementById('riskDisplay');
+                rDisplay.innerText = `GRAU DE RISCO ${risco}`;
+                rDisplay.className = `badge-risk risk-${risco > 2 ? '3' : '2'}`;
+
+                // SALVAR NO CACHE PARA OS OUTROS DOCS
+                const storageData = {
                     razao: data.razao_social,
                     cnpj: cnpj,
                     cnae: data.cnae_fiscal,
                     risco: risco,
-                    cidade: selectedCity,
-                    endereco: `${data.logradouro}, ${data.numero} - ${data.municipio}`
-                }));
+                    endereco: document.getElementById('endereco').value,
+                    riscosBase: (risco >= 3) ? "Ruído, Poeiras, Acidentes com Máquinas" : "Ergonômico, Quedas"
+                };
+                localStorage.setItem('anda_current_company', JSON.stringify(storageData));
 
-                document.getElementById('resultArea').style.display = 'block';
+                document.getElementById('resultCard').style.display = "block";
+
             } catch (err) {
-                errorDiv.innerText = "Erro ao validar CNPJ. Verifique a conexão ou o número.";
-                errorDiv.style.display = 'block';
+                errorDiv.innerText = "Erro na busca. Verifique a conexão ou CNPJ.";
+                errorDiv.style.display = "block";
             } finally {
-                spinner.style.display = 'none';
+                spinner.style.display = "none";
             }
+        }
+
+        function goToDoc(doc) {
+            const data = localStorage.getItem('anda_current_company');
+            if(!data) {
+                alert("Por favor, valide o CNPJ da empresa primeiro!");
+                return;
+            }
+            // Redireciona para a página do documento (ex: pcmso.html)
+            window.location.href = `${doc}.html`;
+        }
+
+        function comingSoon(name) {
+            alert(`O módulo ${name} está sendo estruturado com base nas normas regulamentadoras e estará disponível em breve.`);
         }
     </script>
 </body>
