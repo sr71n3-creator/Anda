@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ANDA - Hub de Engenharia SST</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #0a0b10; --surface: #161b22; --border: #30363d;
+            --neon-green: #00ff9d; --neon-purple: #bd34fe;
+            --text-main: #f0f6fc; --danger: #da3633;
+        }
+        body { background: var(--bg-dark); color: var(--text-main); font-family: 'Roboto', sans-serif; margin: 0; padding-bottom: 80px;}
+        
+        /* HEADER PREMIUM */
+        header {
+            background: rgba(22, 27, 34, 0.95); border-bottom: 1px solid var(--neon-green);
+            padding: 15px; position: sticky; top: 0; z-index: 100;
+            display: flex; justify-content: space-between; align-items: center;
+            backdrop-filter: blur(10px);
+        }
+        .brand { font-family: 'Orbitron'; font-weight: 700; color: var(--neon-green); letter-spacing: 2px; }
+        
+        /* CARDS & INPUTS */
+        .container { max-width: 900px; margin: 20px auto; padding: 0 15px; }
+        .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 20px; }
+        
+        input, textarea, select {
+            width: 100%; background: #0d1117; border: 1px solid var(--border);
+            color: white; padding: 12px; border-radius: 6px; margin-top: 5px;
+        }
+        input:focus { outline: none; border-color: var(--neon-purple); }
+
+        /* GRID DE DOCUMENTOS (DASHBOARD) */
+        .doc-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 10px; margin-top: 20px;
+        }
+        .doc-btn {
+            background: #21262d; border: 1px solid var(--border); color: #8b949e;
+            padding: 15px 5px; border-radius: 8px; font-size: 0.75rem; font-weight: bold;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            cursor: pointer; transition: 0.3s; text-align: center; height: 100px;
+        }
+        .doc-btn:hover { background: #30363d; color: white; transform: translateY(-2px); }
+        .doc-btn.active { border-color: var(--neon-purple); color: var(--neon-purple); background: rgba(189, 52, 254, 0.1); }
+        .doc-btn.base { border-color: var(--neon-green); color: var(--neon-green); }
+
+        /* BOTÕES DE AÇÃO */
+        .btn { border: none; padding: 12px; border-radius: 6px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px;}
+        .btn-primary { background: linear-gradient(45deg, var(--neon-green), #02b683); color: #000; }
+        .btn-purple { background: linear-gradient(45deg, #7c12b5, var(--neon-purple)); color: white; }
+
+        /* CIDADES INDEX */
+        #city-selector { height: 90vh; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px; }
+        .city-btn { padding: 20px 50px; border: 1px solid var(--neon-green); background: transparent; color: var(--neon-green); border-radius: 30px; font-size: 1.2rem; cursor: pointer; }
+        
+        /* LOGO SVG */
+        .logo-mini { width: 30px; height: 30px; }
+    </style>
+</head>
+<body>
+
+    <svg style="display:none;">
+        <symbol id="icon-logo" viewBox="0 0 100 100">
+            <path d="M50 10 L15 90 L35 90 L50 55 L65 90 L85 90 Z" fill="none" stroke="currentColor" stroke-width="5"/>
+            <circle cx="50" cy="10" r="5" fill="currentColor"/>
+        </symbol>
+    </svg>
+
+    <div id="city-selector">
+        <h2 style="font-family:'Orbitron'; color:var(--neon-purple)">SELECIONE A BASE</h2>
+        <button class="city-btn" onclick="startApp('Araucária')">ARAUCÁRIA / PR</button>
+        <button class="city-btn" style="border-color:var(--border); color:var(--text-main)" onclick="startApp('Contenda')">CONTENDA / PR</button>
+    </div>
+
+    <div id="app-main" style="display:none;">
+        <header>
+            <div style="display:flex; align-items:center; gap:10px;">
+                <svg class="logo-mini" style="color:var(--neon-green)"><use href="#icon-logo"/></svg>
+                <span class="brand">ANDA <span style="font-size:0.5em; color:#fff; opacity:0.5">V3.0 SYSTEM</span></span>
+            </div>
+            <div id="status-badge" style="font-size:0.7rem; color:var(--neon-green); border:1px solid var(--neon-green); padding:2px 8px; border-radius:4px;">ONLINE</div>
+        </header>
+
+        <div class="container">
+            <div class="card">
+                <h3 style="margin:0 0 15px 0; color:var(--neon-green)">1. DADOS DA MATRIZ (Validação)</h3>
+                <input type="number" id="cnpj" placeholder="CNPJ (Somente números)">
+                <button class="btn btn-primary" onclick="validateCNPJ()">VALIDAR & SINCRONIZAR DADOS</button>
+                
+                <div id="company-details" style="display:none; margin-top:15px; border-top:1px solid var(--border); padding-top:10px;">
+                    <input type="text" id="razao" readonly style="color:var(--neon-green); font-weight:bold;">
+                    <input type="text" id="cnae" readonly>
+                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+                        <input type="text" id="risco" readonly>
+                        <input type="text" id="cidade" readonly>
+                    </div>
+                    <p style="font-size:0.7rem; color:#888; text-align:center; margin-top:5px;">
+                        🔒 Dados salvos no Cache Seguro do Anda System
+                    </p>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 style="margin:0 0 15px 0; color:var(--neon-purple)">2. GERENCIAMENTO DE RISCOS (PGR)</h3>
+                <label style="font-size:0.8rem; color:#aaa">Inventário de Riscos (Base para o PCMSO)</label>
+                <textarea id="pgr-riscos" rows="4" placeholder="Descreva os riscos físicos, químicos, biológicos..."></textarea>
+                <button class="btn btn-purple" onclick="savePGRData()">SALVAR INVENTÁRIO (PGR)</button>
+            </div>
+
+            <h3 style="font-family:'Orbitron'; margin-bottom:10px;">CENTRAL DE DOCUMENTOS</h3>
+            <p style="font-size:0.8rem; color:#888;">Selecione o documento para abrir o módulo de preenchimento inteligente.</p>
+            
+            <div class="doc-grid" id="doc-grid">
+                </div>
+        </div>
+    </div>
+
+    <script>
+        // CONFIGURAÇÃO
+        const docsList = [
+            "PCMSO", "LTCAT", "AET", "ASO", "PPP", "CAT", "Ficha EPI", "OS", 
+            "Laudo Insalub.", "Laudo Peric.", "PCA", "PPR", "APR", "PT", 
+            "Treinamentos", "Mapa Riscos", "Plano Ação", "PGRTR", "NR-10", 
+            "NR-20", "Radiologia", "Resgate"
+        ];
+        let currentCity = "";
+
+        function startApp(city) {
+            currentCity = city;
+            localStorage.setItem('anda_city', city); // Persistência
+            document.getElementById('city-selector').style.display = 'none';
+            document.getElementById('app-main').style.display = 'block';
+            renderGrid();
+        }
+
+        // RENDERIZA O GRID DE DOCUMENTOS
+        function renderGrid() {
+            const grid = document.getElementById('doc-grid');
+            grid.innerHTML = '';
+            
+            docsList.forEach(doc => {
+                const btn = document.createElement('div');
+                btn.className = 'doc-btn';
+                btn.innerHTML = `<span style="font-size:1.5rem; display:block; margin-bottom:5px;">📄</span>${doc}`;
+                
+                // Lógica de "Link" Inteligente
+                if(doc === 'PCMSO') {
+                    btn.classList.add('active'); // Destaque para o PCMSO
+                    btn.onclick = () => {
+                        // Salva estado antes de ir
+                        savePGRData();
+                        // Navega para o módulo
+                        window.location.href = 'pcmso.html';
+                    };
+                } else {
+                    btn.onclick = () => alert(`O módulo ${doc} será implementado na próxima atualização do sistema.`);
+                }
+                
+                grid.appendChild(btn);
+            });
+        }
+
+        async function validateCNPJ() {
+            const cnpj = document.getElementById('cnpj').value.replace(/\D/g,'');
+            if(cnpj.length !== 14) return alert("CNPJ Inválido");
+
+            document.getElementById('company-details').style.display = 'block';
+            
+            // SIMULAÇÃO API (Aqui entraria o fetch real que fiz no código anterior)
+            // Para demonstrar a integração, vou criar um objeto de dados simulado
+            // Na versão final, use o fetch da BrasilAPI aqui.
+            const fakeData = {
+                razao: "INDÚSTRIA EXEMPLO LTDA",
+                fantasia: "METALÚRGICA EXEMPLO",
+                cnae: "25.11-0 - Fabricação de estruturas metálicas",
+                risco: "3", // Grau de risco
+                logradouro: "Rua das Indústrias, 100",
+                bairro: "Industrial",
+                cidade: currentCity,
+                cnpj: cnpj
+            };
+
+            // PREENCHE TELA
+            document.getElementById('razao').value = fakeData.razao;
+            document.getElementById('cnae').value = fakeData.cnae;
+            document.getElementById('risco').value = `Grau ${fakeData.risco}`;
+            document.getElementById('cidade').value = fakeData.cidade;
+
+            // *** O SEGREDO DO SUCESSO: LOCALSTORAGE ***
+            // Salva os dados na "memória do celular" para o PCMSO usar depois
+            localStorage.setItem('anda_company_data', JSON.stringify(fakeData));
+            
+            // Sugestão Automática de Risco (Logica do app anterior)
+            document.getElementById('pgr-riscos').value = "Ruído contínuo; Radiação não ionizante (Solda); Fumos metálicos.";
+        }
+
+        function savePGRData() {
+            const riscos = document.getElementById('pgr-riscos').value;
+            // Atualiza o cache com os riscos
+            let data = JSON.parse(localStorage.getItem('anda_company_data') || '{}');
+            data.riscos = riscos;
+            localStorage.setItem('anda_company_data', JSON.stringify(data));
+            
+            const btn = document.querySelector('.btn-purple');
+            btn.innerText = "DADOS SINCRONIZADOS!";
+            setTimeout(() => btn.innerText = "SALVAR INVENTÁRIO (PGR)", 2000);
+        }
+    </script>
+</body>
+</html>

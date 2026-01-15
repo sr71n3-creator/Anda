@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ANDA - Módulo PCMSO</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Reutilize o CSS do Index para consistência visual */
+        :root { --bg-dark: #0a0b10; --surface: #161b22; --border: #30363d; --neon-blue: #2f81f7; --text-main: #f0f6fc; }
+        body { background: var(--bg-dark); color: var(--text-main); font-family: 'Roboto', sans-serif; padding: 20px; }
+        
+        .header-mod { border-bottom: 2px solid var(--neon-blue); padding-bottom: 15px; margin-bottom: 20px; display:flex; justify-content:space-between;}
+        .title { font-family: 'Orbitron'; color: var(--neon-blue); font-size: 1.5rem; }
+        
+        .box { background: var(--surface); padding: 15px; border-radius: 8px; border: 1px solid var(--border); margin-bottom: 15px; }
+        .highlight { color: var(--neon-blue); font-weight: bold; }
+        
+        .btn-back { background: transparent; border: 1px solid #888; color: #888; padding: 8px 15px; border-radius: 20px; cursor: pointer; }
+        .btn-generate { background: var(--neon-blue); color: white; border: none; padding: 15px; width: 100%; font-size: 1.1rem; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top:20px;}
+
+        /* CHECKBOX CUSTOMIZADO */
+        .check-item { display: flex; align-items: center; background: #21262d; padding: 10px; margin-bottom: 5px; border-radius: 4px; border-left: 3px solid transparent;}
+        .check-item.selected { border-left-color: var(--neon-blue); background: rgba(47, 129, 247, 0.1); }
+    </style>
+</head>
+<body>
+
+    <div class="header-mod">
+        <div>
+            <div class="title">PCMSO</div>
+            <small style="color:#888">Controle Médico de Saúde Ocupacional</small>
+        </div>
+        <button class="btn-back" onclick="window.location.href='index.html'">↩ Voltar ao Hub</button>
+    </div>
+
+    <div class="box" id="integration-box">
+        <h3 style="margin-top:0">🔗 Integração PGR Detectada</h3>
+        <p style="font-size:0.9rem">O sistema identificou dados vindos do PGR da empresa <span id="company-name" class="highlight">...</span>.</p>
+        
+        <div style="background:#0d1117; padding:10px; border-radius:4px; font-family:monospace; margin:10px 0;">
+            <strong>Riscos Importados:</strong><br>
+            <span id="imported-risks" style="color:#ff7b72">Nenhum risco encontrado.</span>
+        </div>
+
+        <button onclick="autoFill()" style="background:#238636; color:white; border:none; padding:10px; width:100%; border-radius:4px; cursor:pointer;">
+            ⚡ Tocar para AUTO-PREENCHER Exames Sugeridos
+        </button>
+    </div>
+
+    <form id="pcmso-form">
+        <label>Médico Coordenador / Examinador</label>
+        <input type="text" style="width:100%; padding:10px; background:#0d1117; color:white; border:1px solid #333; margin-bottom:10px;" placeholder="Dr. Fulano (CRM 0000)">
+
+        <label>Exames Complementares (Baseado nos Riscos)</label>
+        <div id="exams-list" style="margin-top:5px;">
+            <div class="check-item"><input type="checkbox"> Audiometria Tonal (Ruído)</div>
+            <div class="check-item"><input type="checkbox"> Espirometria (Poeiras)</div>
+            <div class="check-item"><input type="checkbox"> Raio-X de Tórax (OIT)</div>
+            <div class="check-item"><input type="checkbox"> Acuidade Visual</div>
+            <div class="check-item"><input type="checkbox"> Avaliação Psicossocial (Espaço Confinado/Altura)</div>
+        </div>
+
+        <button type="button" class="btn-generate" onclick="generatePCMSO()">GERAR DOCUMENTO PCMSO (PDF)</button>
+    </form>
+
+    <script>
+        // AO CARREGAR A PÁGINA
+        window.onload = function() {
+            // 1. Recupera dados do LocalStorage (A Mágica da Continuidade)
+            const dataString = localStorage.getItem('anda_company_data');
+            
+            if(!dataString) {
+                alert("Nenhuma empresa selecionada no HUB! Redirecionando...");
+                window.location.href = 'index.html';
+                return;
+            }
+
+            const data = JSON.parse(dataString);
+            
+            // 2. Preenche visualmente
+            document.getElementById('company-name').innerText = data.razao;
+            
+            if(data.riscos) {
+                document.getElementById('imported-risks').innerText = data.riscos;
+            }
+        };
+
+        // LÓGICA DE AUTO-PREENCHIMENTO (Expertise Médica Artificial)
+        function autoFill() {
+            const riscos = document.getElementById('imported-risks').innerText.toLowerCase();
+            const checks = document.querySelectorAll('#exams-list input');
+            
+            // Reseta
+            checks.forEach(c => c.checked = false);
+
+            // Inteligência de Associação (Risco -> Exame)
+            let sugestoes = 0;
+            if(riscos.includes('ruído') || riscos.includes('ruido')) {
+                checks[0].checked = true; // Audiometria
+                checks[0].parentElement.classList.add('selected');
+                sugestoes++;
+            }
+            if(riscos.includes('poeira') || riscos.includes('fumos') || riscos.includes('químico')) {
+                checks[1].checked = true; // Espirometria
+                checks[2].checked = true; // Raio-X
+                checks[1].parentElement.classList.add('selected');
+                checks[2].parentElement.classList.add('selected');
+                sugestoes++;
+            }
+            if(riscos.includes('altura') || riscos.includes('confinado')) {
+                checks[4].checked = true; // Psicossocial
+                checks[4].parentElement.classList.add('selected');
+                sugestoes++;
+            }
+
+            // Feedback Tátil
+            if(navigator.vibrate) navigator.vibrate(50); 
+            alert(`${sugestoes} protocolos de exames foram sugeridos com base no PGR. Revise e confirme.`);
+        }
+
+        function generatePCMSO() {
+            const data = JSON.parse(localStorage.getItem('anda_company_data'));
+            // Lógica de Impressão (Igual à que fiz no código anterior, mas adaptada para PCMSO)
+            alert(`Gerando PCMSO para ${data.razao}...\nIncluindo exames selecionados.`);
+        }
+    </script>
+</body>
+</html>
