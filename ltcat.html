@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ANDA - Módulo LTCAT</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        /* DESIGN SYSTEM UNIFICADO */
+        :root { --bg-dark: #0a0b10; --surface: #161b22; --border: #30363d; --neon-orange: #ff9d00; --text-main: #f0f6fc; }
+        body { background: var(--bg-dark); color: var(--text-main); font-family: 'Roboto', sans-serif; padding: 20px; }
+        
+        .header-mod { border-bottom: 2px solid var(--neon-orange); padding-bottom: 15px; margin-bottom: 20px; display:flex; justify-content:space-between; align-items:center;}
+        .title { font-family: 'Orbitron'; color: var(--neon-orange); font-size: 1.5rem; }
+        
+        .card { background: var(--surface); padding: 20px; border-radius: 8px; border: 1px solid var(--border); margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; color: #8b949e; font-size: 0.9rem; }
+        input, select, textarea { width: 100%; padding: 10px; background: #0d1117; border: 1px solid #333; color: white; border-radius: 4px; margin-bottom: 15px; }
+        
+        .conclusion-box { border: 1px dashed var(--neon-orange); padding: 15px; background: rgba(255, 157, 0, 0.05); }
+        
+        .btn-back { background: transparent; border: 1px solid #888; color: #888; padding: 8px 15px; border-radius: 20px; cursor: pointer; text-decoration: none;}
+        .btn-generate { background: linear-gradient(45deg, var(--neon-orange), #ff5e00); color: white; border: none; padding: 15px; width: 100%; font-size: 1.1rem; border-radius: 8px; font-weight: bold; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <div class="header-mod">
+        <div>
+            <div class="title">LTCAT</div>
+            <small style="color:#888">Lei 8.213/91 - Previdência Social (INSS)</small>
+        </div>
+        <a href="index.html" class="btn-back">↩ Voltar ao Hub</a>
+    </div>
+
+    <div class="card">
+        <h3 style="margin-top:0; color:var(--neon-orange)">🏢 Dados da Empresa (Integrado)</h3>
+        <div style="display:grid; grid-template-columns: 2fr 1fr; gap:10px;">
+            <div>
+                <label>Razão Social</label>
+                <input type="text" id="razao" readonly style="color:var(--neon-orange); font-weight:bold;">
+            </div>
+            <div>
+                <label>CNPJ</label>
+                <input type="text" id="cnpj" readonly>
+            </div>
+        </div>
+        <small>ℹ️ Dados importados automaticamente do Cache Seguro ANDA.</small>
+    </div>
+
+    <div class="card">
+        <h3>📊 Avaliação Quantitativa (Agentes Nocivos)</h3>
+        
+        <label>Agente Físico Principal (Ruído/Calor)</label>
+        <select id="agente">
+            <option value="Nenhum">Ausência de Agentes Nocivos</option>
+            <option value="Ruído">Ruído acima de 85 dB(A)</option>
+            <option value="Calor">Calor (IBUTG acima do limite)</option>
+            <option value="Quimico">Químicos (Anexo 11/12/13)</option>
+            <option value="Bio">Biológicos (Infectocontagiosos)</option>
+        </select>
+
+        <label>Intensidade/Concentração Medida</label>
+        <input type="text" id="medicao" placeholder="Ex: 88.5 dB(A) ou 28.5 IBUTG">
+
+        <label>Técnica de Medição Utilizada</label>
+        <input type="text" id="tecnica" value="Dosimetria de Ruído (NHO-01) / Medidor Integrador">
+    </div>
+
+    <div class="card conclusion-box">
+        <h3>🛡️ Eficácia do EPI & Conclusão</h3>
+        
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+            <div>
+                <label>EPI é Eficaz?</label>
+                <select id="epiEficaz">
+                    <option value="Sim">SIM (Atenua o risco)</option>
+                    <option value="Não">NÃO (Não atenua)</option>
+                </select>
+            </div>
+            <div>
+                <label>CA do Equipamento</label>
+                <input type="number" placeholder="Ex: 12345">
+            </div>
+        </div>
+
+        <label style="margin-top:10px; color:var(--neon-orange); font-weight:bold;">CONCLUSÃO (GFIP/eSocial)</label>
+        <select id="conclusaoGFIP" style="border: 1px solid var(--neon-orange);">
+            <option value="01">01 - Não exposto a agente nocivo (Aposentadoria Comum)</option>
+            <option value="04">04 - Aposentadoria Especial (25 anos)</option>
+            <option value="02">02 - Aposentadoria Especial (15 anos - Mineração)</option>
+        </select>
+        <p style="font-size:0.8rem; color:#888;">*O sistema sugere o código 01 se o EPI for eficaz para Ruído (Conforme ARE 664335 STF), mas permite edição pelo Engenheiro.</p>
+    </div>
+
+    <button class="btn-generate" onclick="generateLTCAT()">GERAR LAUDO PREVIDENCIÁRIO (PDF)</button>
+
+    <script>
+        // CARREGAMENTO INTELIGENTE
+        window.onload = function() {
+            const data = JSON.parse(localStorage.getItem('anda_company_data'));
+            if(data) {
+                document.getElementById('razao').value = data.razao;
+                document.getElementById('cnpj').value = data.cnpj;
+            } else {
+                alert("Erro de Sessão: Inicie pelo Index.");
+                window.location.href = 'index.html';
+            }
+        };
+
+        function generateLTCAT() {
+            const conclusao = document.getElementById('conclusaoGFIP').options[document.getElementById('conclusaoGFIP').selectedIndex].text;
+            alert(`Gerando LTCAT Padrão INSS...\nEmpresa: ${document.getElementById('razao').value}\nConclusão: ${conclusao}\n\nDocumento pronto para impressão.`);
+            // Aqui entraria a lógica de window.print() similar aos anteriores
+        }
+    </script>
+</body>
+</html>

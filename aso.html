@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ANDA - Emissor de ASO</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        /* DESIGN SYSTEM SYSTEM (VARIAÇÃO MEDICAL WHITE/CYAN) */
+        :root { --bg-dark: #0a0b10; --surface: #161b22; --border: #30363d; --neon-cyan: #00e5ff; --text-main: #f0f6fc; }
+        body { background: var(--bg-dark); color: var(--text-main); font-family: 'Roboto', sans-serif; padding: 20px; }
+        
+        .header-mod { border-bottom: 2px solid var(--neon-cyan); padding-bottom: 15px; margin-bottom: 20px; display:flex; justify-content:space-between; align-items:center;}
+        .title { font-family: 'Orbitron'; color: var(--neon-cyan); font-size: 1.5rem; }
+        
+        .card { background: var(--surface); padding: 20px; border-radius: 8px; border: 1px solid var(--border); margin-bottom: 15px; }
+        
+        /* ESTILO DOS RADIO BUTTONS */
+        .radio-group { display: flex; gap: 10px; margin-bottom: 15px; }
+        .radio-btn { flex: 1; position: relative; }
+        .radio-btn input { position: absolute; opacity: 0; }
+        .radio-btn label { 
+            display: block; padding: 10px; background: #21262d; border: 1px solid #444; 
+            text-align: center; border-radius: 4px; cursor: pointer; transition: 0.3s;
+        }
+        .radio-btn input:checked + label { background: var(--neon-cyan); color: #000; font-weight: bold; border-color: var(--neon-cyan); }
+
+        .fit-unfit { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px; }
+        .status-btn { padding: 20px; border: none; border-radius: 8px; font-weight: bold; font-size: 1.2rem; cursor: pointer; opacity: 0.5; transition: 0.3s; }
+        .status-btn.selected { opacity: 1; transform: scale(1.05); }
+        .apto { background: #238636; color: white; }
+        .inapto { background: #da3633; color: white; }
+
+        .btn-print { background: linear-gradient(to right, var(--neon-cyan), #00a8cc); color: black; width: 100%; padding: 15px; font-weight: bold; border: none; border-radius: 8px; margin-top: 20px; cursor: pointer; font-size: 1.1rem;}
+    </style>
+</head>
+<body>
+
+    <div class="header-mod">
+        <div>
+            <div class="title">ASO</div>
+            <small style="color:#888">NR-07 - Atestado de Saúde Ocupacional</small>
+        </div>
+        <button onclick="window.location.href='index.html'" style="background:transparent; border:1px solid #666; color:#ccc; padding:5px 10px; border-radius:15px;">↩ Voltar</button>
+    </div>
+
+    <div class="card">
+        <h3>👤 Dados do Colaborador</h3>
+        <input type="text" placeholder="Nome Completo do Funcionário" style="width:100%; padding:10px; margin-bottom:10px; background:#0d1117; color:white; border:1px solid #444;">
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+            <input type="text" placeholder="CPF" style="padding:10px; background:#0d1117; color:white; border:1px solid #444;">
+            <input type="text" placeholder="Função / Cargo" style="padding:10px; background:#0d1117; color:white; border:1px solid #444;">
+        </div>
+    </div>
+
+    <div class="card">
+        <h3>📋 Tipo de Exame</h3>
+        <div class="radio-group">
+            <div class="radio-btn"><input type="radio" name="tipo" id="adm" checked><label for="adm">Admissional</label></div>
+            <div class="radio-btn"><input type="radio" name="tipo" id="per"><label for="per">Periódico</label></div>
+            <div class="radio-btn"><input type="radio" name="tipo" id="dem"><label for="dem">Demissional</label></div>
+        </div>
+        
+        <div class="radio-group">
+            <div class="radio-btn"><input type="radio" name="tipo" id="ret"><label for="ret">Retorno</label></div>
+            <div class="radio-btn"><input type="radio" name="tipo" id="mud"><label for="mud">Mudança Func.</label></div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h3>🔬 Exames Realizados (Puxar do PCMSO)</h3>
+        <div id="exames-container" style="color:#bbb; font-size:0.9rem;">
+            <label><input type="checkbox" checked disabled> Avaliação Clínica (Anamnese + Físico)</label><br>
+        </div>
+    </div>
+
+    <div class="fit-unfit">
+        <button class="status-btn apto selected" onclick="setStatus('apto')">✅ APTO</button>
+        <button class="status-btn inapto" onclick="setStatus('inapto')">❌ INAPTO</button>
+    </div>
+
+    <button class="btn-print" onclick="printASO()">EMITIR ATESTADO (ASO)</button>
+
+    <script>
+        let statusFinal = 'apto';
+
+        window.onload = function() {
+            // Integração: Puxa riscos do Index para sugerir exames no ASO
+            const data = JSON.parse(localStorage.getItem('anda_company_data') || '{}');
+            const container = document.getElementById('exames-container');
+            
+            if(data.riscos) {
+                const r = data.riscos.toLowerCase();
+                if(r.includes('ruído')) container.innerHTML += `<label><input type="checkbox" checked> Audiometria Tonal</label><br>`;
+                if(r.includes('poeira') || r.includes('químico')) container.innerHTML += `<label><input type="checkbox" checked> Espirometria + RX Tórax</label><br>`;
+                if(r.includes('altura')) container.innerHTML += `<label><input type="checkbox" checked> Psicossocial + Glicemia</label><br>`;
+            }
+        };
+
+        function setStatus(status) {
+            statusFinal = status;
+            document.querySelector('.apto').classList.remove('selected');
+            document.querySelector('.inapto').classList.remove('selected');
+            document.querySelector('.' + status).classList.add('selected');
+        }
+
+        function printASO() {
+            alert(`Imprimindo ASO... Status: ${statusFinal.toUpperCase()}`);
+            // Lógica de impressão padrão
+        }
+    </script>
+</body>
+</html>
