@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ANDA - Emissor de CAT S-2210</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
+
+    <style>
+        :root { --bg: #0a0b10; --surf: #161b22; --border: #30363d; --neon-cat: #ff6a00; --text: #f0f6fc; }
+        body { background: var(--bg); color: var(--text); font-family: 'Roboto', sans-serif; padding: 20px; margin: 0; }
+        
+        .header { border-bottom: 2px solid var(--neon-cat); padding-bottom: 15px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
+        .title { font-family: 'Orbitron'; color: var(--neon-cat); font-size: 1.3rem; }
+        
+        .card { background: var(--surf); border: 1px solid var(--border); border-radius: 12px; padding: 18px; margin-bottom: 15px; }
+        
+        label { font-size: 0.7rem; color: var(--neon-cat); text-transform: uppercase; display: block; margin-bottom: 8px; }
+        input, select, textarea { width: 100%; padding: 12px; background: #000; border: 1px solid #333; color: white; border-radius: 8px; margin-bottom: 10px; box-sizing: border-box; }
+
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        
+        .btn-send { 
+            background: linear-gradient(90deg, #ff6a00, #ff2e00); color: white; border: none; padding: 20px; 
+            width: 100%; border-radius: 10px; font-weight: bold; font-family: 'Orbitron'; cursor: pointer;
+            box-shadow: 0 4px 15px rgba(255, 106, 0, 0.3);
+        }
+
+        .alert-box { background: rgba(255, 62, 62, 0.1); border-left: 4px solid #ff3e3e; padding: 10px; font-size: 0.8rem; margin-bottom: 15px; display: none; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <div><div class="title">C.A.T. DIGITAL</div><small>S-2210 - Comunicação de Acidente</small></div>
+        <a href="index.html" style="color:#666; text-decoration:none; font-size:0.8rem;">↩ HUB</a>
+    </div>
+
+    <div id="aviso_apr" class="alert-box">
+        ⚠️ ATENÇÃO: Existe uma APR em aberto para este setor. Verifique se as medidas de controle foram descumpridas.
+    </div>
+
+    <div class="card">
+        <label>Dados da Ocorrência</label>
+        <div class="grid-2">
+            <input type="date" id="cat_data">
+            <input type="time" id="cat_hora">
+        </div>
+        <select id="cat_tipo">
+            <option value="1">Típico</option>
+            <option value="2">Doença Ocupacional</option>
+            <option value="3">Trajeto</option>
+        </select>
+    </div>
+
+    <div class="card">
+        <label>Análise Técnica</label>
+        <input type="text" id="cat_parte" placeholder="Parte do corpo atingida (Ex: Mão Direita)">
+        <input type="text" id="cat_agente" placeholder="Agente Causador (Ex: Prensa Hidráulica)">
+        <textarea id="cat_descricao" rows="3" placeholder="Descrição detalhada do acidente..."></textarea>
+    </div>
+
+    <div class="card">
+        <label>Informações Médicas (Atestado)</label>
+        <div class="grid-2">
+            <input type="text" id="cat_cid" placeholder="CID-10">
+            <input type="number" id="cat_dias" placeholder="Dias de Afastamento">
+        </div>
+    </div>
+
+    <button class="btn-send" onclick="enviarCAT()">REGISTRAR E ENVIAR eSOCIAL</button>
+
+    <script>
+        const firebaseConfig = { apiKey: "SUA_API_KEY", projectId: "SEU_PROJETO" }; 
+        if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+    </script>
+    <script src="polimata-core.js"></script>
+    <script>
+        window.onload = () => {
+            // Inteligência: Verificar se o último risco na APR era alto
+            Polimata.load('apr', (aprData) => {
+                if(aprData && aprData.nivel === 'alto') {
+                    document.getElementById('aviso_apr').style.display = 'block';
+                }
+            });
+
+            Polimata.load('cat', (data) => {
+                if(data) {
+                    document.getElementById('cat_data').value = data.data;
+                    document.getElementById('cat_tipo').value = data.tipo;
+                    document.getElementById('cat_descricao').value = data.descricao;
+                }
+            });
+        };
+
+        async function enviarCAT() {
+            const data = {
+                data: document.getElementById('cat_data').value,
+                hora: document.getElementById('cat_hora').value,
+                tipo: document.getElementById('cat_tipo').value,
+                descricao: document.getElementById('cat_descricao').value,
+                cid: document.getElementById('cat_cid').value,
+                enviado_esocial: true,
+                timestamp: new Date().toISOString()
+            };
+            await Polimata.save('cat', data);
+            alert("CAT enviada com sucesso para a fila do eSocial!");
+        }
+    </script>
+</body>
+</html>

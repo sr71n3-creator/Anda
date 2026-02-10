@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ANDA - PGRTR (NR-31)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
+
+    <style>
+        :root { --bg: #0a100a; --surf: #162216; --border: #303d30; --neon-rural: #76ff03; --text: #f0f6fc; }
+        body { background: var(--bg); color: var(--text); font-family: 'Roboto', sans-serif; padding: 15px; margin: 0; }
+        
+        .header { border-bottom: 2px solid var(--neon-rural); padding: 15px 0; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
+        .title { font-family: 'Orbitron'; color: var(--neon-rural); font-size: 1.1rem; }
+        
+        .card { background: var(--surf); border: 1px solid var(--border); border-radius: 12px; padding: 15px; margin-bottom: 15px; }
+        
+        label { font-size: 0.7rem; display: block; margin-bottom: 5px; color: var(--neon-rural); text-transform: uppercase; }
+        select, input, textarea { 
+            width: 100%; padding: 12px; background: #000; border: 1px solid #3d4d3d; 
+            color: white; border-radius: 8px; margin-bottom: 10px; box-sizing: border-box;
+        }
+
+        .btn-save { 
+            background: var(--neon-rural); color: #000; border: none; padding: 18px; 
+            width: 100%; border-radius: 10px; font-weight: bold; font-family: 'Orbitron'; 
+            cursor: pointer; transition: 0.3s;
+        }
+        .btn-save:hover { box-shadow: 0 0 20px rgba(118, 255, 3, 0.4); }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <div><div class="title">PGRTR - RURAL</div><small>NR-31 - Gestão no Campo</small></div>
+        <a href="index.html" style="color:#666; text-decoration:none; font-size:0.8rem;">↩ HUB</a>
+    </div>
+
+    <div class="card">
+        <label>Gestão de Agrotóxicos</label>
+        <select id="agro_classe">
+            <option value="I">Classe I - Extremamente Tóxico</option>
+            <option value="II">Classe II - Altamente Tóxico</option>
+            <option value="III">Classe III - Mediamente Tóxico</option>
+        </select>
+        <label>Período de Carência (Horas)</label>
+        <input type="number" id="agro_carencia" placeholder="Ex: 24">
+    </div>
+
+    <div class="card">
+        <label>Segurança em Máquinas (Tratores/Implementos)</label>
+        <div style="font-size: 0.8rem; margin-bottom: 10px;">
+            <input type="checkbox" id="check_protecao"> Proteção de tomada de força (TDP) OK?<br>
+            <input type="checkbox" id="check_epir"> Estrutura de Proteção na Capotagem OK?
+        </div>
+        <label>Observações Técnicas</label>
+        <textarea id="obs_maquinas" rows="3" placeholder="Descreva condições de segurança..."></textarea>
+    </div>
+
+    <button class="btn-save" onclick="salvarPGRTR()">ATUALIZAR INVENTÁRIO RURAL</button>
+
+    <script>
+        // Configuração Firebase (Reutilize suas chaves aqui)
+        const firebaseConfig = { apiKey: "SUA_API_KEY", projectId: "SEU_PROJETO" }; 
+        if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+    </script>
+    <script src="polimata-core.js"></script>
+    <script>
+        window.onload = () => {
+            Polimata.load('pgrtr', (data) => {
+                if(data) {
+                    document.getElementById('agro_classe').value = data.agro_classe;
+                    document.getElementById('agro_carencia').value = data.agro_carencia;
+                    document.getElementById('check_protecao').checked = data.check_protecao;
+                    document.getElementById('check_epir').checked = data.check_epir;
+                    document.getElementById('obs_maquinas').value = data.obs_maquinas;
+                }
+            });
+        };
+
+        async function salvarPGRTR() {
+            const data = {
+                agro_classe: document.getElementById('agro_classe').value,
+                agro_carencia: document.getElementById('agro_carencia').value,
+                check_protecao: document.getElementById('check_protecao').checked,
+                check_epir: document.getElementById('check_epir').checked,
+                obs_maquinas: document.getElementById('obs_maquinas').value
+            };
+            await Polimata.save('pgrtr', data);
+            alert("Inventário Rural Sincronizado!");
+        }
+    </script>
+</body>
+</html>

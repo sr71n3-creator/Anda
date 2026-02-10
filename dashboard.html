@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>ANDA - Dashboard BI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body { background: #05070a; color: white; font-family: 'Inter', sans-serif; margin: 0; padding: 20px; }
+        .container { max-width: 1200px; margin: auto; }
+        .header-db { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+        .title { font-family: 'Orbitron'; color: #00f2ff; text-transform: uppercase; }
+        
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px; }
+        .stat-card { background: #111418; border: 1px solid #30363d; padding: 25px; border-radius: 15px; text-align: center; }
+        .stat-val { display: block; font-size: 2.5rem; font-family: 'Orbitron'; color: #00f2ff; margin-bottom: 5px; }
+        .stat-label { color: #8b949e; font-size: 0.8rem; text-transform: uppercase; }
+
+        .charts-row { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; }
+        .chart-box { background: #111418; border: 1px solid #30363d; padding: 20px; border-radius: 15px; }
+        
+        .btn-back { color: #8b949e; text-decoration: none; font-size: 0.9rem; border: 1px solid #30363d; padding: 8px 15px; border-radius: 8px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header-db">
+            <h2 class="title">Compliance Intelligence</h2>
+            <a href="index.html" class="btn-back">↩ VOLTAR AO HUB</a>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card"><span class="stat-val" id="val_riscos">--</span><span class="stat-label">Riscos Mapeados</span></div>
+            <div class="stat-card"><span class="stat-val" id="val_func">--</span><span class="stat-label">Colaboradores</span></div>
+            <div class="stat-card"><span class="stat-val" style="color: #39ff14;">100%</span><span class="stat-label">Treinamentos OK</span></div>
+            <div class="stat-card"><span class="stat-val" style="color: #ff3e3e;">02</span><span class="stat-label">Exames Vencendo</span></div>
+        </div>
+
+        <div class="charts-row">
+            <div class="chart-box">
+                <canvas id="mainChart"></canvas>
+            </div>
+            <div class="chart-box">
+                <h3 style="font-family: 'Orbitron'; font-size: 0.9rem; color: #8b949e;">DISTRIBUIÇÃO DE RISCOS</h3>
+                <canvas id="pieChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <script src="polimata-core.js"></script>
+    <script>
+        window.onload = () => {
+            const data = Polimata.load('empresa') || {};
+            const riscos = Polimata.load('pgr') || [];
+            
+            document.getElementById('val_riscos').innerText = riscos.length || 0;
+            document.getElementById('val_func').innerText = Polimata.load('rh')?.length || 0;
+
+            // Gráfico de Barras
+            new Chart(document.getElementById('mainChart'), {
+                type: 'bar',
+                data: {
+                    labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'],
+                    datasets: [{
+                        label: 'Investimento em Prevenção (R$)',
+                        data: [1200, 1900, 3000, 500, 2000, 4000],
+                        backgroundColor: '#00f2ff'
+                    }]
+                },
+                options: { plugins: { legend: { labels: { color: 'white' } } } }
+            });
+
+            // Gráfico de Pizza
+            new Chart(document.getElementById('pieChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['Físico', 'Químico', 'Ergonômico'],
+                    datasets: [{
+                        data: [10, 5, 15],
+                        backgroundColor: ['#39ff14', '#ff3e3e', '#00f2ff']
+                    }]
+                },
+                options: { plugins: { legend: { position: 'bottom', labels: { color: 'white' } } } }
+            });
+        };
+    </script>
+</body>
+</html>

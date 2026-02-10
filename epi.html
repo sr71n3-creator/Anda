@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>ANDA - Ficha de EPI Digital</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg: #0a0b10; --surf: #161b22; --border: #30363d; --neon-pink: #ff007f; --text: #f0f6fc; }
+        body { background: var(--bg); color: var(--text); font-family: 'Roboto', sans-serif; padding: 20px; margin: 0; }
+        .header { border-bottom: 2px solid var(--neon-pink); padding-bottom: 15px; margin-bottom: 20px; }
+        .title { font-family: 'Orbitron'; color: var(--neon-pink); font-size: 1.3rem; }
+        .card { background: var(--surf); border: 1px solid var(--border); border-radius: 12px; padding: 15px; margin-bottom: 15px; }
+        .epi-row { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+        input { width: 100%; padding: 10px; background: #000; border: 1px solid #333; color: white; border-radius: 5px; box-sizing: border-box; }
+        .signature-pad { height: 100px; background: #000; border: 1px dashed var(--neon-pink); border-radius: 8px; margin-top: 10px; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; color: #444; }
+        .btn-epi { background: var(--neon-pink); color: white; border: none; padding: 18px; width: 100%; border-radius: 10px; font-weight: bold; font-family: 'Orbitron'; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="title">CONTROLE DE E.P.I.</div>
+        <small>NR-06 - Registro de Entrega e Substituição</small>
+    </div>
+
+    <div class="card">
+        <label style="font-size:0.7rem; color:var(--neon-pink)">COLABORADOR</label>
+        <input type="text" id="epi_funcionario" placeholder="Nome do Funcionário">
+    </div>
+
+    <div class="card">
+        <div class="epi-row" style="font-size:0.6rem; color:var(--neon-pink)">
+            <div>EQUIPAMENTO</div><div>C.A.</div><div>DATA</div>
+        </div>
+        <div id="lista_epi">
+            <div class="epi-row">
+                <input type="text" value="Protetor Auricular Plug">
+                <input type="text" value="11512">
+                <input type="date">
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <p style="font-size:0.7rem; color:#888;">Declaro que recebi os EPIs listados e fui treinado quanto ao uso correto.</p>
+        <div class="signature-pad">ASSINATURA DIGITAL / BIOMETRIA</div>
+    </div>
+
+    <button class="btn-epi" onclick="alert('Ficha de EPI Sincronizada com eSocial!')">SALVAR ENTREGA DIGITAL</button>
+</body>
+</html>

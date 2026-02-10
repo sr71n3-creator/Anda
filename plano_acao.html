@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ANDA - Plano de Ação 5W2H</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg: #0a0b10; --surf: #161b22; --border: #30363d; --neon-cyan: #00e5ff; --text: #f0f6fc; }
+        body { background: var(--bg); color: var(--text); font-family: 'Roboto', sans-serif; padding: 15px; margin: 0; }
+        .header { border-bottom: 2px solid var(--neon-cyan); padding: 15px 0; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
+        .title { font-family: 'Orbitron'; color: var(--neon-cyan); font-size: 1.1rem; }
+        .table-container { overflow-x: auto; background: var(--surf); border-radius: 12px; border: 1px solid var(--border); }
+        table { width: 100%; border-collapse: collapse; min-width: 800px; }
+        th { background: #0d1117; color: var(--neon-cyan); padding: 12px; font-size: 0.7rem; text-transform: uppercase; border-bottom: 1px solid var(--border); }
+        td { padding: 10px; border-bottom: 1px solid #21262d; }
+        input { background: transparent; border: 1px solid #30363d; color: white; width: 100%; padding: 5px; border-radius: 4px; font-size: 0.8rem; }
+        .btn-add { background: transparent; border: 1px dashed var(--neon-cyan); color: var(--neon-cyan); padding: 10px; width: 100%; border-radius: 8px; cursor: pointer; margin-top: 15px; font-family: 'Orbitron'; font-size: 0.7rem; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div><div class="title">PLANO DE AÇÃO (5W2H)</div><small>Gestão de Conformidade NR-01</small></div>
+        <a href="index.html" style="color:#666; text-decoration:none; font-size:0.8rem;">↩ HUB</a>
+    </div>
+
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>O Quê (What)</th>
+                    <th>Por Quê (Why)</th>
+                    <th>Quem (Who)</th>
+                    <th>Quando (When)</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody id="actionTable">
+                <tr>
+                    <td><input type="text" value="Instalar Linha de Vida"></td>
+                    <td><input type="text" value="Risco de Queda (PGR)"></td>
+                    <td><input type="text" value="Eng. Manutenção"></td>
+                    <td><input type="date" value="2025-12-30"></td>
+                    <td><select style="background:#000; color:#0f0;"><option>Em Aberto</option><option>Concluído</option></select></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <button class="btn-add" onclick="addRow()">+ ADICIONAR NOVA AÇÃO</button>
+
+    <script>
+        function addRow() {
+            const row = `<tr><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="date"></td><td><select style="background:#000; color:#0f0;"><option>Em Aberto</option></select></td></tr>`;
+            document.getElementById('actionTable').innerHTML += row;
+        }
+    </script>
+</body>
+</html>

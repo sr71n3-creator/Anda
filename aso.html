@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ANDA - Emissor de ASO</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
+
+    <style>
+        :root { --bg-dark: #0a0b10; --surface: #161b22; --border: #30363d; --neon-cyan: #00e5ff; --text-main: #f0f6fc; }
+        body { background: var(--bg-dark); color: var(--text-main); font-family: 'Roboto', sans-serif; padding: 20px; margin: 0; }
+        
+        .header-mod { border-bottom: 2px solid var(--neon-cyan); padding-bottom: 15px; margin-bottom: 20px; display:flex; justify-content:space-between; align-items:center;}
+        .title { font-family: 'Orbitron'; color: var(--neon-cyan); font-size: 1.3rem; }
+        
+        .card { background: var(--surface); padding: 20px; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 15px; }
+        
+        label { font-size: 0.7rem; color: var(--neon-cyan); text-transform: uppercase; display: block; margin-bottom: 8px; }
+        input, select { width: 100%; padding: 12px; background: #000; border: 1px solid #333; color: white; border-radius: 8px; margin-bottom: 15px; box-sizing: border-box; }
+
+        .status-container { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
+        .btn-status { 
+            padding: 15px; border: 1px solid #333; border-radius: 8px; text-align: center; 
+            cursor: pointer; font-weight: bold; transition: 0.3s; background: #000;
+        }
+        .btn-status.active-apto { border-color: #39ff14; color: #39ff14; box-shadow: 0 0 10px rgba(57, 255, 20, 0.2); }
+        .btn-status.active-inapto { border-color: #ff3e3e; color: #ff3e3e; box-shadow: 0 0 10px rgba(255, 62, 62, 0.2); }
+
+        .btn-print { 
+            background: var(--neon-cyan); color: #000; border: none; padding: 18px; 
+            width: 100%; border-radius: 10px; font-weight: bold; font-family: 'Orbitron'; 
+            cursor: pointer; margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header-mod">
+        <div><div class="title">EMISSOR A.S.O.</div><small>Atestado de Saúde Ocupacional</small></div>
+        <a href="index.html" style="color:#666; text-decoration:none; font-size:0.8rem;">↩ HUB</a>
+    </div>
+
+    <div class="card">
+        <label>Dados do Trabalhador</label>
+        <input type="text" id="aso_nome" placeholder="Nome Completo">
+        <input type="text" id="aso_funcao" placeholder="Função / Cargo">
+    </div>
+
+    <div class="card">
+        <label>Tipo de Exame</label>
+        <select id="aso_tipo">
+            <option value="admissional">Admissional</option>
+            <option value="periodico">Periódico</option>
+            <option value="retorno">Retorno ao Trabalho</option>
+            <option value="mudanca">Mudança de Riscos</option>
+            <option value="demissional">Demissional</option>
+        </select>
+
+        <label>Exames Complementares Realizados</label>
+        <div id="lista_exames" style="font-size: 0.8rem; color: #888; background: #000; padding: 10px; border-radius: 5px;">
+            Aguardando sincronização...
+        </div>
+    </div>
+
+    <div class="card">
+        <label>Parecer Conclusivo</label>
+        <div class="status-container">
+            <div id="status_apto" class="btn-status" onclick="setStatus('apto')">APTO</div>
+            <div id="status_inapto" class="btn-status" onclick="setStatus('inapto')">INAPTO</div>
+        </div>
+        <input type="hidden" id="aso_resultado" value="">
+    </div>
+
+    <button class="btn-print" onclick="salvarASO()">GERAR E SALVAR ASO</button>
+
+    <script>
+        const firebaseConfig = { apiKey: "SUA_API_KEY", projectId: "SEU_PROJETO" }; 
+        if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+    </script>
+    <script src="polimata-core.js"></script>
+    <script>
+        let conclusao = "";
+
+        function setStatus(val) {
+            conclusao = val;
+            document.getElementById('status_apto').className = 'btn-status' + (val === 'apto' ? ' active-apto' : '');
+            document.getElementById('status_inapto').className = 'btn-status' + (val === 'inapto' ? ' active-inapto' : '');
+            document.getElementById('aso_resultado').value = val;
+        }
+
+        window.onload = () => {
+            // Carregar dados salvos do ASO
+            Polimata.load('aso', (data) => {
+                if(data) {
+                    document.getElementById('aso_nome').value = data.nome || "";
+                    document.getElementById('aso_funcao').value = data.funcao || "";
+                    document.getElementById('aso_tipo').value = data.tipo || "admissional";
+                    if(data.resultado) setStatus(data.resultado);
+                }
+            });
+
+            // Inteligência Cruzada: Buscar o que o PCMSO definiu
+            Polimata.load('pcmso', (pcmsoData) => {
+                if(pcmsoData) {
+                    let exames = [];
+                    if(pcmsoData.ex_audio) exames.push("Audiometria");
+                    if(pcmsoData.ex_espiro) exames.push("Espirometria");
+                    if(pcmsoData.ex_psico) exames.push("Avaliação Psicossocial");
+                    if(pcmsoData.ex_hemo) exames.push("Hemograma");
+                    
+                    document.getElementById('lista_exames').innerHTML = exames.length > 0 ? 
+                        exames.join(" • ") : "Apenas Exame Clínico (Padrão)";
+                }
+            });
+        };
+
+        async function salvarASO() {
+            const data = {
+                nome: document.getElementById('aso_nome').value,
+                funcao: document.getElementById('aso_funcao').value,
+                tipo: document.getElementById('aso_tipo').value,
+                resultado: document.getElementById('aso_resultado').value,
+                data_emissao: new Date().toLocaleDateString()
+            };
+            await Polimata.save('aso', data);
+            alert("ASO Gerado com Sucesso no Banco de Dados!");
+        }
+    </script>
+</body>
+</html>

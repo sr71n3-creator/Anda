@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ANDA - Gestão de PCA</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg: #0a0b10; --surf: #161b22; --border: #30363d; --neon-pca: #bd34fe; --text: #f0f6fc; }
+        body { background: var(--bg); color: var(--text); font-family: 'Roboto', sans-serif; padding: 15px; margin: 0; }
+        .header { border-bottom: 2px solid var(--neon-pca); padding: 15px 0; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
+        .title { font-family: 'Orbitron'; color: var(--neon-pca); font-size: 1.2rem; }
+        .card { background: var(--surf); border: 1px solid var(--border); border-radius: 12px; padding: 15px; margin-bottom: 15px; }
+        .audio-graph { height: 60px; display: flex; align-items: flex-end; gap: 4px; margin: 10px 0; }
+        .bar { background: var(--neon-pca); width: 8px; border-radius: 4px 4px 0 0; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div><div class="title">P.C.A. MANAGER</div><small>Conservação Auditiva</small></div>
+        <a href="index.html" style="color:#666; text-decoration:none; font-size:0.8rem;">↩ HUB</a>
+    </div>
+
+    <div class="card">
+        <label style="color:var(--neon-pca); font-size:0.7rem;">HISTÓRICO AUDIOMÉTRICO</label>
+        <div class="audio-graph">
+            <div class="bar" style="height: 20%;"></div><div class="bar" style="height: 40%;"></div><div class="bar" style="height: 35%;"></div><div class="bar" style="height: 60%;"></div>
+            <div class="bar" style="height: 30%;"></div><div class="bar" style="height: 50%;"></div>
+        </div>
+        <input type="text" placeholder="Nome do Funcionário">
+        <input type="date" placeholder="Data da Última Audiometria">
+    </div>
+
+    <div class="card">
+        <label style="color:var(--neon-pca); font-size:0.7rem;">STATUS AUDITIVO</label>
+        <select>
+            <option>Limiares Normais</option>
+            <option>Estável (PAIR)</option>
+            <option>Agravamento Detectado</option>
+        </select>
+        <textarea rows="2" placeholder="Medidas Adotadas (Retreinamento de uso de EPI...)"></textarea>
+    </div>
+
+    <button style="background:var(--neon-pca); color:white; width:100%; padding:20px; border-radius:10px; font-family:Orbitron; font-weight:bold; border:none; cursor:pointer;" onclick="alert('Histórico de PCA Atualizado.')">ATUALIZAR GESTÃO DE PCA</button>
+</body>
+</html>

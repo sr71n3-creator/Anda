@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ANDA - Inventário de Riscos</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body { background: #0a0b10; color: #ccc; font-family: 'Roboto', sans-serif; padding: 10px; }
+        .table-container { overflow-x: auto; background: #161b22; border-radius: 8px; border: 1px solid #30363d; }
+        table { width: 100%; border-collapse: collapse; min-width: 600px; }
+        th { background: #21262d; color: #00ff9d; padding: 12px; text-align: left; font-size: 0.7rem; border-bottom: 2px solid #30363d; }
+        td { padding: 10px; border-bottom: 1px solid #30363d; font-size: 0.75rem; }
+        .matrix { padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 0.6rem; }
+        .high { background: #ff3e3e; color: white; }
+        .medium { background: #d4af37; color: black; }
+    </style>
+</head>
+<body>
+    <h3 style="color:#00ff9d; font-family:sans-serif;">INVENTÁRIO DE RISCOS (PGR)</h3>
+    
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>GHE / Setor</th>
+                    <th>Perigo / Fator de Risco</th>
+                    <th>Severidade</th>
+                    <th>Probab.</th>
+                    <th>Nível de Risco</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Produção 01</td>
+                    <td>Ruído Contínuo (88 dB)</td>
+                    <td>Moderada</td>
+                    <td>Alta</td>
+                    <td><span class="matrix high">CRÍTICO</span></td>
+                </tr>
+                <tr>
+                    <td>Adm / Escritório</td>
+                    <td>Postura Inadequada</td>
+                    <td>Leve</td>
+                    <td>Média</td>
+                    <td><span class="matrix medium">MODERADO</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <button style="width:100%; margin-top:15px; background:transparent; border:1px solid #00ff9d; color:#00ff9d; padding:10px; border-radius:5px; cursor:pointer;" onclick="alert('Exportando para PGR...')">VINCULAR AO PGR PRINCIPAL</button>
+</body>
+</html>

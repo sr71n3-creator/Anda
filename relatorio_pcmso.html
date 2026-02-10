@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ANDA - Relatório Analítico PCMSO</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg: #0a0b10; --surf: #161b22; --border: #30363d; --neon-blue: #007bff; --text: #f0f6fc; }
+        body { background: var(--bg); color: var(--text); font-family: 'Roboto', sans-serif; padding: 15px; margin: 0; }
+        .header { border-bottom: 2px solid var(--neon-blue); padding: 15px 0; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
+        .title { font-family: 'Orbitron'; color: var(--neon-blue); font-size: 1.1rem; }
+        .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 20px; }
+        .stat-card { background: var(--surf); border: 1px solid var(--border); padding: 15px; border-radius: 10px; text-align: center; }
+        .stat-val { font-size: 1.5rem; font-family: 'Orbitron'; color: var(--neon-blue); }
+        .chart-box { height: 150px; border-left: 2px solid #333; border-bottom: 2px solid #333; margin-top: 10px; display: flex; align-items: flex-end; justify-content: space-around; padding: 5px; }
+        .bar { width: 30px; background: var(--neon-blue); transition: 0.5s; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div><div class="title">RELATÓRIO ANUAL</div><small>Quadro Estatístico NR-07</small></div>
+        <a href="index.html" style="color:#666; text-decoration:none; font-size:0.8rem;">↩ HUB</a>
+    </div>
+
+    <div class="stats-grid">
+        <div class="stat-card"><div class="stat-val">124</div><small>Admitidos</small></div>
+        <div class="stat-card"><div class="stat-val">342</div><small>Periódicos</small></div>
+        <div class="stat-card"><div class="stat-val">12</div><small>Inaptos</small></div>
+        <div class="stat-card"><div class="stat-val">98%</div><small>Conformidade</small></div>
+    </div>
+
+    <div class="stat-card">
+        <label style="font-size:0.7rem; color:var(--neon-blue)">DISTRIBUIÇÃO POR EXAME</label>
+        <div class="chart-box">
+            <div class="bar" style="height: 40%;" title="Admissional"></div>
+            <div class="bar" style="height: 90%;" title="Periódico"></div>
+            <div class="bar" style="height: 15%;" title="Demissional"></div>
+            <div class="bar" style="height: 10%;" title="Mudança Função"></div>
+        </div>
+    </div>
+
+    <button style="width:100%; padding:18px; background:var(--neon-blue); color:white; border:none; border-radius:10px; font-family:Orbitron; margin-top:20px;" onclick="window.print()">EXPORTAR QUADRO III (NR-7)</button>
+</body>
+</html>

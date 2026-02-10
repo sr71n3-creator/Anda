@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ANDA - Proteção Radiológica</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg: #050505; --surf: #1a1a1a; --neon-rad: #ccff00; --text: #e0e0e0; }
+        body { background: var(--bg); color: var(--text); font-family: 'Roboto', sans-serif; padding: 15px; margin: 0; }
+        .header { border-bottom: 2px solid var(--neon-rad); padding: 15px 0; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
+        .title { font-family: 'Orbitron'; color: var(--neon-rad); font-size: 1.1rem; text-shadow: 0 0 10px rgba(204, 255, 0, 0.5); }
+        .card { background: var(--surf); border: 1px solid #333; border-radius: 12px; padding: 15px; margin-bottom: 15px; }
+        .rad-symbol { width: 50px; height: 50px; margin: 0 auto 10px; border: 2px solid var(--neon-rad); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; color: var(--neon-rad); }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div><div class="title">RADIOPROTEÇÃO</div><small>Normas CNEN / NR-32</small></div>
+        <a href="index.html" style="color:#666; text-decoration:none; font-size:0.8rem;">↩ HUB</a>
+    </div>
+
+    
+
+    <div class="card" style="text-align: center;">
+        <div class="rad-symbol">☢</div>
+        <label style="color:var(--neon-rad); font-size:0.7rem;">CONTROLE DE EXPOSIÇÃO (DOSIMETRIA)</label>
+        <input type="text" placeholder="ID do Dosímetro" style="width:100%; background:#000; border:1px solid #444; color:white; padding:10px; margin:10px 0; border-radius:5px;">
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+            <input type="text" placeholder="mSv/mês" style="background:#000; color:white; border:1px solid #444; padding:10px;">
+            <select style="background:#000; color:white; border:1px solid #444; padding:10px;"><option>Área Controlada</option><option>Área Livre</option></select>
+        </div>
+    </div>
+
+    <div class="card">
+        <label style="color:var(--neon-rad); font-size:0.7rem;">BARREIRAS DE PROTEÇÃO</label>
+        <div style="font-size:0.8rem; margin-top:10px;">
+            <input type="checkbox"> Blindagem de Chumbo (Argamassa Baritada) OK<br>
+            <input type="checkbox"> Vidro Plumbífero íntegro OK<br>
+            <input type="checkbox"> Sinalização Luminosa "Raio-X em Uso" OK
+        </div>
+    </div>
+
+    <button style="width:100%; padding:20px; background:var(--neon-rad); color:black; border:none; border-radius:10px; font-family:Orbitron; font-weight:bold; cursor:pointer;" onclick="alert('Plano de Radioproteção Atualizado.')">EMITIR RELATÓRIO TÉCNICO</button>
+</body>
+</html>

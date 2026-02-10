@@ -1,0 +1,304 @@
+
+<!DOCTYPE html>
+<!-- saved from url=(0041)file:///C:/Users/heinz/Desktop/index.html -->
+<html lang="pt-BR"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ANDA - Sistema de Engenharia SST Premium</title>
+    <link href="./ANDA - Sistema de Engenharia SST Premium_files/css2" rel="stylesheet">
+    <style>
+        /* --- DESIGN SYSTEM "ANDA" v3.0 (PREMIUM DARK) --- */
+        :root {
+            --bg-dark: #0a0b10;
+            --surface: #161b22;
+            --primary-neon: #00ff9d; /* Verde Araucária */
+            --secondary-neon: #bd34fe; /* Roxo Amanda */
+            --text-main: #f0f6fc;
+            --border: #30363d;
+            --danger: #f85149;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            margin: 0;
+            padding-bottom: 50px;
+        }
+
+        /* HEADER PREMIUM REESTILIZADO */
+        header {
+            background: rgba(22, 27, 34, 0.98);
+            border-bottom: 1px solid var(--primary-neon);
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.8);
+            position: sticky; top: 0; z-index: 1000;
+        }
+
+        .brand-wrapper { display: flex; align-items: center; gap: 15px; }
+        .brand-name {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            letter-spacing: 4px;
+            background: linear-gradient(90deg, #fff, var(--primary-neon));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-transform: uppercase;
+        }
+
+        .logo-svg { width: 50px; height: 50px; filter: drop-shadow(0 0 10px var(--primary-neon)); }
+
+        .container { max-width: 1000px; margin: 30px auto; padding: 0 20px; }
+
+        /* CARDS E INPUTS */
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: ''; position: absolute; top:0; left:0; width: 100%; height: 2px;
+            background: linear-gradient(90deg, var(--primary-neon), var(--secondary-neon));
+        }
+
+        label { color: var(--primary-neon); font-size: 0.8rem; font-weight: bold; text-transform: uppercase; display: block; margin-bottom: 8px; }
+        
+        input {
+            width: 100%; background: #0d1117; border: 1px solid var(--border);
+            color: white; padding: 14px; border-radius: 8px; font-size: 1rem; transition: 0.3s;
+        }
+
+        input:focus { border-color: var(--secondary-neon); outline: none; box-shadow: 0 0 10px rgba(189, 52, 254, 0.2); }
+
+        .btn-validate {
+            background: linear-gradient(45deg, var(--primary-neon), #02b683);
+            color: #000; border: none; padding: 16px; border-radius: 8px;
+            font-weight: bold; cursor: pointer; width: 100%; margin-top: 15px;
+            font-family: 'Orbitron'; letter-spacing: 1px; transition: 0.3s;
+        }
+
+        .btn-validate:hover { transform: scale(1.02); box-shadow: 0 0 20px rgba(0, 255, 157, 0.4); }
+
+        /* GRID DE DOCUMENTOS (O SEU PEDIDO) */
+        .doc-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .doc-item {
+            background: #1c2128;
+            border: 1px solid var(--border);
+            padding: 20px 10px;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .doc-item:hover {
+            border-color: var(--secondary-neon);
+            background: #2d333b;
+            transform: translateY(-5px);
+        }
+
+        .doc-item.active {
+            border: 1px solid var(--primary-neon);
+            background: rgba(0, 255, 157, 0.05);
+        }
+
+        .doc-item i { font-size: 1.5rem; color: var(--secondary-neon); }
+        .doc-item span { font-size: 0.75rem; font-weight: bold; text-transform: uppercase; color: #8b949e; }
+        .doc-item.active span { color: var(--primary-neon); }
+
+        /* STATUS BADGE */
+        .badge-risk {
+            padding: 10px; border-radius: 6px; font-weight: bold; text-align: center; margin-top: 10px;
+        }
+        .risk-3 { background: #f85149; color: white; }
+        .risk-2 { background: #e3b341; color: black; }
+        
+        .loader {
+            border: 3px solid #f3f3f3; border-top: 3px solid var(--secondary-neon);
+            border-radius: 50%; width: 20px; height: 20px; animation: spin 1s linear infinite;
+            display: none; margin: 0 auto;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="brand-wrapper">
+            <svg class="logo-svg" viewBox="0 0 100 100">
+                <path d="M50 15 L20 85 L35 85 L50 50 L65 85 L80 85 Z" fill="none" stroke="#00ff9d" stroke-width="4" stroke-linejoin="round"></path>
+                <path d="M50 35 L50 75" stroke="#bd34fe" stroke-width="3" stroke-linecap="round"></path> 
+                <circle cx="50" cy="15" r="4" fill="#00ff9d"></circle>
+            </svg>
+            <span class="brand-name">Anda</span>
+        </div>
+        <div id="city-tag" style="font-family:&#39;Orbitron&#39;; font-size: 0.8rem; color: var(--secondary-neon);">SST PREMIUM v3.0</div>
+    </header>
+
+    <div class="container">
+        <div class="card">
+            <label>Identificação do Estabelecimento (CNPJ)</label>
+            <input type="number" id="cnpjInput" placeholder="Digite apenas os números do CNPJ">
+            <button class="btn-validate" onclick="fetchCompanyData()">
+                <div id="spinner" class="loader" style="display: none;"></div> VALIDAR EMPRESA NO SISTEMA
+            </button>
+            <div id="apiError" style="color: var(--danger); font-size: 0.8rem; margin-top: 10px; display: none;">CNPJ deve ter 14 dígitos.</div>
+        </div>
+
+        <div id="resultCard" class="card" style="display: block;">
+            <label>Razão Social</label>
+            <input type="text" id="razaoSocial" readonly="">
+            
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px; margin-top:15px;">
+                <div>
+                    <label>CNAE Principal</label>
+                    <input type="text" id="cnaeCode" readonly="">
+                </div>
+                <div>
+                    <label>Grau de Risco (NR-04)</label>
+                    <div id="riskDisplay" class="badge-risk risk-2">GRAU DE RISCO 2</div>
+                </div>
+            </div>
+
+            <label style="margin-top:15px;">Descrição da Atividade</label>
+            <input type="text" id="cnaeDesc" readonly="">
+            
+            <label style="margin-top:15px;">Localização Validada</label>
+            <input type="text" id="endereco" readonly="">
+        </div>
+
+        <h3 style="font-family:&#39;Orbitron&#39;; color:var(--text-main); margin-top:40px; border-left:4px solid var(--secondary-neon); padding-left:15px;">CENTRAL DE DOCUMENTOS</h3>
+        <p style="color:#8b949e; font-size:0.85rem;">Selecione o documento para preenchimento inteligente baseado nos dados acima.</p>
+
+        <div class="doc-grid">
+            <div class="doc-item active" onclick="goToDoc(&#39;pgr&#39;)">
+                <i>📄</i>
+                <span>PGR</span>
+            </div>
+            <div class="doc-item active" onclick="goToDoc(&#39;pcmso&#39;)">
+                <i>🏥</i>
+                <span>PCMSO</span>
+            </div>
+            <div class="doc-item active" onclick="goToDoc(&#39;ltcat&#39;)">
+                <i>⚖️</i>
+                <span>LTCAT</span>
+            </div>
+            <div class="doc-item active" onclick="goToDoc(&#39;aso&#39;)">
+                <i>🩺</i>
+                <span>ASO</span>
+            </div>
+            
+            <div class="doc-item" onclick="comingSoon(&#39;AET&#39;)"><i>💺</i><span>AET</span></div>
+            <div class="doc-item" onclick="comingSoon(&#39;PPP&#39;)"><i>📑</i><span>PPP</span></div>
+            <div class="doc-item" onclick="comingSoon(&#39;CAT&#39;)"><i>⚠️</i><span>CAT</span></div>
+            <div class="doc-item" onclick="comingSoon(&#39;OS&#39;)"><i>📝</i><span>O.S.</span></div>
+            <div class="doc-item" onclick="comingSoon(&#39;EPI&#39;)"><i>🦺</i><span>Ficha EPI</span></div>
+            <div class="doc-item" onclick="comingSoon(&#39;Insalubridade&#39;)"><i>🧪</i><span>Insalub.</span></div>
+            <div class="doc-item" onclick="comingSoon(&#39;Periculosidade&#39;)"><i>💥</i><span>Pericul.</span></div>
+            <div class="doc-item" onclick="comingSoon(&#39;PCA&#39;)"><i>👂</i><span>PCA</span></div>
+            <div class="doc-item" onclick="comingSoon(&#39;PPR&#39;)"><i>🎭</i><span>PPR</span></div>
+            <div class="doc-item" onclick="comingSoon(&#39;APR&#39;)"><i>🔍</i><span>APR</span></div>
+            <div class="doc-item" onclick="comingSoon(&#39;NR-10&#39;)"><i>⚡</i><span>NR-10</span></div>
+            <div class="doc-item" onclick="comingSoon(&#39;NR-12&#39;)"><i>⚙️</i><span>NR-12</span></div>
+            <div class="doc-item" onclick="comingSoon(&#39;NR-20&#39;)"><i>⛽</i><span>NR-20</span></div>
+            <div class="doc-item" onclick="comingSoon(&#39;Radiológica&#39;)"><i>☢️</i><span>Radiológ.</span></div>
+            <div class="doc-item" onclick="comingSoon(&#39;Resgate&#39;)"><i>🚁</i><span>Resgate</span></div>
+        </div>
+    </div>
+
+    <script>
+        const riskMap = {
+            '01': 3, '05': 4, '41': 3, '42': 4, '43': 3, '452': 3, '62': 1, 'default': 2
+        };
+
+        async function fetchCompanyData() {
+            const cnpj = document.getElementById('cnpjInput').value.replace(/\D/g,'');
+            const spinner = document.getElementById('spinner');
+            const errorDiv = document.getElementById('apiError');
+
+            if(cnpj.length !== 14) {
+                errorDiv.innerText = "CNPJ deve ter 14 dígitos.";
+                errorDiv.style.display = "block";
+                return;
+            }
+
+            errorDiv.style.display = "none";
+            spinner.style.display = "inline-block";
+
+            try {
+                const response = await fetch(`https://brasilapi.com.br/api/cnpj/v1/${cnpj}`);
+                if(!response.ok) throw new Error("CNPJ não encontrado.");
+                
+                const data = await response.json();
+
+                // Preencher campos
+                document.getElementById('razaoSocial').value = data.razao_social;
+                document.getElementById('cnaeCode').value = data.cnae_fiscal;
+                document.getElementById('cnaeDesc').value = data.cnae_fiscal_descricao;
+                document.getElementById('endereco').value = `${data.logradouro}, ${data.numero} - ${data.municipio}/${data.uf}`;
+
+                // Calcular Risco
+                const cnaeInic = data.cnae_fiscal.toString().substring(0, 2);
+                const risco = riskMap[cnaeInic] || riskMap['default'];
+                
+                const rDisplay = document.getElementById('riskDisplay');
+                rDisplay.innerText = `GRAU DE RISCO ${risco}`;
+                rDisplay.className = `badge-risk risk-${risco > 2 ? '3' : '2'}`;
+
+                // SALVAR NO CACHE PARA OS OUTROS DOCS
+                const storageData = {
+                    razao: data.razao_social,
+                    cnpj: cnpj,
+                    cnae: data.cnae_fiscal,
+                    risco: risco,
+                    endereco: document.getElementById('endereco').value,
+                    riscosBase: (risco >= 3) ? "Ruído, Poeiras, Acidentes com Máquinas" : "Ergonômico, Quedas"
+                };
+                localStorage.setItem('anda_current_company', JSON.stringify(storageData));
+
+                document.getElementById('resultCard').style.display = "block";
+
+            } catch (err) {
+                errorDiv.innerText = "Erro na busca. Verifique a conexão ou CNPJ.";
+                errorDiv.style.display = "block";
+            } finally {
+                spinner.style.display = "none";
+            }
+        }
+
+        function goToDoc(doc) {
+            const data = localStorage.getItem('anda_current_company');
+            if(!data) {
+                alert("Por favor, valide o CNPJ da empresa primeiro!");
+                return;
+            }
+            // Redireciona para a página do documento (ex: pcmso.html)
+            window.location.href = `${doc}.html`;
+        }
+
+        function comingSoon(name) {
+            alert(`O módulo ${name} está sendo estruturado com base nas normas regulamentadoras e estará disponível em breve.`);
+        }
+    </script>
+
+</body></html>

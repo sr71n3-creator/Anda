@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ANDA - APR Industrial Digital</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
+
+    <style>
+        :root { --bg: #0a0b10; --surf: #1c1c1c; --border: #333; --neon-red: #ff3e3e; --text: #eee; }
+        body { background: var(--bg); color: var(--text); font-family: 'Roboto', sans-serif; padding: 15px; margin: 0; }
+        
+        .header { 
+            border-bottom: 2px solid var(--neon-red); 
+            padding: 15px 0; 
+            margin-bottom: 20px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+        }
+        .title { font-family: 'Orbitron'; color: var(--neon-red); font-size: 1.2rem; }
+        
+        .card { background: var(--surf); border-radius: 10px; padding: 15px; margin-bottom: 15px; border: 1px solid var(--border); }
+        
+        input, select, textarea { 
+            width: 100%; 
+            padding: 12px; 
+            background: #000; 
+            border: 1px solid #444; 
+            color: white; 
+            border-radius: 8px; 
+            margin-top: 5px; 
+            box-sizing: border-box;
+        }
+
+        .btn-gen { 
+            background: var(--neon-red); 
+            color: white; 
+            border: none; 
+            padding: 18px; 
+            width: 100%; 
+            border-radius: 10px; 
+            font-weight: bold; 
+            font-family: 'Orbitron'; 
+            cursor: pointer; 
+            margin-top: 10px;
+            box-shadow: 0 0 15px rgba(255, 62, 62, 0.3);
+        }
+
+        .risk-matrix { display: grid; grid-template-columns: 2fr 2fr 1fr; gap: 10px; margin-top: 10px; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <div class="title">A.P.R. DIGITAL</div>
+        <a href="index.html" style="color:#666; text-decoration:none; font-size:0.8rem;">↩ HUB</a>
+    </div>
+
+    <div class="card">
+        <label>Atividade / Tarefa</label>
+        <input type="text" id="atividade" placeholder="Ex: Manutenção em Altura - Telhado">
+        
+        <label style="margin-top:10px; display:block;">Local da Execução</label>
+        <input type="text" id="local" placeholder="Ex: Galpão Logístico B">
+    </div>
+
+    <div class="card" id="riskSection">
+        <h3 style="font-size:0.8rem; color:var(--neon-red)">MATRIZ DE RISCO OPERACIONAL</h3>
+        <div class="risk-matrix">
+            <input type="text" id="passo" placeholder="Passo da Tarefa">
+            <input type="text" id="perigo" placeholder="Risco Identificado">
+            <select id="severidade">
+                <option value="Baixa">BAIXA</option>
+                <option value="Média">MÉDIA</option>
+                <option value="Alta">ALTA</option>
+            </select>
+        </div>
+    </div>
+
+    <button class="btn-gen" onclick="salvarAPR()">SALVAR & SINCRONIZAR NA NUVEM</button>
+
+    <script>
+        // Utilize os mesmos dados de configuração do index.html
+        const firebaseConfig = {
+            apiKey: "COLE_SUA_API_KEY_AQUI",
+            authDomain: "SEU_PROJETO.firebaseapp.com",
+            projectId: "SEU_PROJETO",
+            storageBucket: "SEU_PROJETO.appspot.com",
+            messagingSenderId: "SEU_ID",
+            appId: "SEU_APP_ID"
+        };
+        if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
+        const db = firebase.firestore();
+    </script>
+    <script src="polimata-core.js"></script>
+    <script>
+        // Carregamento Automático
+        window.onload = () => {
+            Polimata.load('apr', (data) => {
+                if(data) {
+                    document.getElementById('atividade').value = data.atividade || '';
+                    document.getElementById('local').value = data.local || '';
+                    document.getElementById('passo').value = data.passo || '';
+                    document.getElementById('perigo').value = data.perigo || '';
+                    document.getElementById('severidade').value = data.severidade || 'Baixa';
+                }
+            });
+        };
+
+        async function salvarAPR() {
+            const data = {
+                atividade: document.getElementById('atividade').value,
+                local: document.getElementById('local').value,
+                passo: document.getElementById('passo').value,
+                perigo: document.getElementById('perigo').value,
+                severidade: document.getElementById('severidade').value,
+                status: "Emitida"
+            };
+
+            await Polimata.save('apr', data);
+            
+            if(navigator.vibrate) navigator.vibrate(100);
+            alert("APR Sincronizada com Sucesso!");
+        }
+    </script>
+</body>
+</html>

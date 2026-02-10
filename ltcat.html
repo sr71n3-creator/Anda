@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ANDA - LTCAT Profissional</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
+
+    <style>
+        :root { --bg: #0a0b10; --surf: #161b22; --border: #30363d; --neon-orange: #ff9d00; --text: #f0f6fc; }
+        body { background: var(--bg); color: var(--text); font-family: 'Roboto', sans-serif; padding: 20px; margin: 0; }
+        
+        .header { border-bottom: 2px solid var(--neon-orange); padding-bottom: 15px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
+        .title { font-family: 'Orbitron'; color: var(--neon-orange); font-size: 1.3rem; }
+        
+        .card { background: var(--surf); border: 1px solid var(--border); border-radius: 12px; padding: 15px; margin-bottom: 15px; }
+        
+        label { font-size: 0.7rem; color: var(--neon-orange); text-transform: uppercase; display: block; margin-bottom: 5px; }
+        input, select, textarea { width: 100%; padding: 12px; background: #000; border: 1px solid #333; color: white; border-radius: 8px; margin-bottom: 10px; box-sizing: border-box; }
+
+        .highlight-box { background: rgba(255, 157, 0, 0.1); border: 1px dashed var(--neon-orange); padding: 15px; border-radius: 8px; margin-top: 10px; }
+        
+        .btn-ltcat { 
+            background: var(--neon-orange); color: #000; border: none; padding: 18px; 
+            width: 100%; border-radius: 10px; font-weight: bold; font-family: 'Orbitron'; cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <div><div class="title">L.T.C.A.T.</div><small>Laudo Técnico Previdenciário</small></div>
+        <a href="index.html" style="color:#666; text-decoration:none; font-size:0.8rem;">↩ HUB</a>
+    </div>
+
+    <div class="card">
+        <label>Metodologia de Avaliação</label>
+        <select id="metodo">
+            <option value="NHO">NHO (Fundacentro)</option>
+            <option value="NR15">NR-15 (MTE)</option>
+            <option value="MIX">Ambas (Padrão Recomendado)</option>
+        </select>
+        <label>Instrumento Utilizado</label>
+        <input type="text" id="instrumento" placeholder="Ex: Dosímetro de Ruído mod. 01 / Calibrado">
+    </div>
+
+    <div class="card">
+        <label>Enquadramento Previdenciário (GFIP)</label>
+        <select id="gfip_code">
+            <option value="00">00 - Sem exposição a agente nocivo</option>
+            <option value="01">01 - Exposição a agente nocivo (Aposentadoria Comum)</option>
+            <option value="04">04 - Especial 25 anos</option>
+            <option value="03">03 - Especial 20 anos</option>
+            <option value="02">02 - Especial 15 anos</option>
+        </select>
+        
+        <div class="highlight-box">
+            <label>Conclusão Técnica</label>
+            <textarea id="conclusao_tecnica" rows="4" placeholder="O trabalhador está ou não exposto de forma habitual e permanente..."></textarea>
+        </div>
+    </div>
+
+    <button class="btn-ltcat" onclick="salvarLTCAT()">CONCLUIR LAUDO TÉCNICO</button>
+
+    <script>
+        const firebaseConfig = { apiKey: "SUA_API_KEY", projectId: "SEU_PROJETO" }; 
+        if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+    </script>
+    <script src="polimata-core.js"></script>
+    <script>
+        window.onload = () => {
+            Polimata.load('ltcat', (data) => {
+                if(data) {
+                    document.getElementById('metodo').value = data.metodo;
+                    document.getElementById('instrumento').value = data.instrumento;
+                    document.getElementById('gfip_code').value = data.gfip_code;
+                    document.getElementById('conclusao_tecnica').value = data.conclusao_tecnica;
+                }
+            });
+
+            // Inteligência Polimata: Sugerir GFIP baseada no risco da APR
+            Polimata.load('apr', (aprData) => {
+                if(aprData && aprData.nivel === 'crítico') {
+                    document.getElementById('gfip_code').value = "01";
+                    document.getElementById('conclusao_tecnica').value = "Devido ao nível crítico de risco detectado na APR, sugere-se enquadramento para fins previdenciários...";
+                }
+            });
+        };
+
+        async function salvarLTCAT() {
+            const data = {
+                metodo: document.getElementById('metodo').value,
+                instrumento: document.getElementById('instrumento').value,
+                gfip_code: document.getElementById('gfip_code').value,
+                conclusao_tecnica: document.getElementById('conclusao_tecnica').value
+            };
+            await Polimata.save('ltcat', data);
+            alert("LTCAT Sincronizado!");
+        }
+    </script>
+</body>
+</html>

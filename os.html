@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>ANDA - Ordem de Serviço</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg: #0a0b10; --surf: #161b22; --border: #30363d; --neon-yellow: #f1e05a; --text: #f0f6fc; }
+        body { background: var(--bg); color: var(--text); font-family: 'Roboto', sans-serif; padding: 20px; margin: 0; }
+        .header { border-bottom: 2px solid var(--neon-yellow); padding-bottom: 15px; margin-bottom: 20px; }
+        .title { font-family: 'Orbitron'; color: var(--neon-yellow); font-size: 1.3rem; }
+        .card { background: var(--surf); border: 1px solid var(--border); border-radius: 12px; padding: 15px; margin-bottom: 15px; }
+        .risk-item { border-left: 3px solid var(--neon-yellow); padding-left: 10px; margin-bottom: 10px; font-size: 0.8rem; }
+        .btn-os { background: var(--neon-yellow); color: #000; border: none; padding: 18px; width: 100%; border-radius: 10px; font-weight: bold; font-family: 'Orbitron'; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="title">ORDEM DE SERVIÇO</div>
+        <small>NR-01 - Disposições Gerais</small>
+    </div>
+
+    <div class="card">
+        <label style="font-size:0.7rem; color:var(--neon-yellow)">ATIVIDADES DO CARGO</label>
+        <textarea id="os_atividades" rows="3" style="width:100%; background:#000; color:white; border:1px solid #333; border-radius:8px;">Operar máquinas, realizar manutenção preventiva e zelar pela limpeza do posto.</textarea>
+    </div>
+
+    <div class="card">
+        <label style="font-size:0.7rem; color:var(--neon-yellow)">RISCOS DETECTADOS NO PGR</label>
+        <div id="os_riscos_lista">
+            <div class="risk-item">Físico: Ruído Contínuo (85 dB)</div>
+            <div class="risk-item">Acidente: Queda de Nível</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <label style="font-size:0.7rem; color:var(--neon-yellow)">PROIBIÇÕES</label>
+        <p style="font-size:0.8rem;">● Operar equipamentos sem treinamento.<br>● Remover proteções de máquinas.<br>● Não utilizar EPIs fornecidos.</p>
+    </div>
+
+    <button class="btn-os" onclick="alert('O.S. Gerada e vinculada ao prontuário do funcionário!')">EMITIR ORDEM DE SERVIÇO</button>
+
+    <script src="polimata-core.js"></script>
+    <script>
+        window.onload = () => {
+            // Inteligência Cruzada: Se houver PGR, carrega os riscos aqui
+            Polimata.load('pgr', (data) => {
+                if(data && data.riscos) {
+                    document.getElementById('os_riscos_lista').innerHTML = data.riscos.map(r => `<div class="risk-item">${r}</div>`).join('');
+                }
+            });
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ANDA - Módulo PCMSO</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
+
+    <style>
+        :root { --bg-dark: #0a0b10; --surface: #161b22; --border: #30363d; --neon-blue: #2f81f7; --text-main: #f0f6fc; }
+        body { background: var(--bg-dark); color: var(--text-main); font-family: 'Roboto', sans-serif; padding: 20px; margin: 0; }
+        
+        .header-mod { border-bottom: 2px solid var(--neon-blue); padding-bottom: 15px; margin-bottom: 20px; display:flex; justify-content:space-between; align-items: center;}
+        .title { font-family: 'Orbitron'; color: var(--neon-blue); font-size: 1.3rem; }
+        
+        .box { background: var(--surface); padding: 20px; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 20px; }
+        
+        .protocol-row { 
+            display: flex; align-items: center; justify-content: space-between; 
+            padding: 12px; border-bottom: 1px solid #222; 
+        }
+        .protocol-row:last-child { border: none; }
+        
+        .btn-action { 
+            background: var(--neon-blue); color: white; border: none; padding: 15px; 
+            width: 100%; border-radius: 8px; font-weight: bold; font-family: 'Orbitron'; cursor: pointer;
+        }
+
+        .risk-tag { 
+            font-size: 0.6rem; background: rgba(47, 129, 247, 0.2); 
+            color: var(--neon-blue); padding: 2px 8px; border-radius: 4px; margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header-mod">
+        <div><div class="title">P.C.M.S.O.</div><small>NR-07 - Programa de Saúde</small></div>
+        <a href="index.html" style="color:#666; text-decoration:none; font-size:0.8rem;">↩ HUB</a>
+    </div>
+
+    <div class="box">
+        <h3 style="font-size: 0.9rem; margin-top: 0;">Protocolos de Exames Sugeridos</h3>
+        <p style="font-size: 0.7rem; color: #888;">Baseado nos riscos detectados no PGR/APR.</p>
+        
+        <div id="protocolosContainer">
+            <div class="protocol-row">
+                <span>Audiometria Tonal <span class="risk-tag">Ruído</span></span>
+                <input type="checkbox" id="ex_audio" checked>
+            </div>
+            <div class="protocol-row">
+                <span>Espirometria <span class="risk-tag">Poeiras/Fumos</span></span>
+                <input type="checkbox" id="ex_espiro">
+            </div>
+            <div class="protocol-row">
+                <span>Avaliação Psicossocial <span class="risk-tag">Altura/Confinado</span></span>
+                <input type="checkbox" id="ex_psico">
+            </div>
+            <div class="protocol-row">
+                <span>Hemograma Completo <span class="risk-tag">Químicos</span></span>
+                <input type="checkbox" id="ex_hemo">
+            </div>
+        </div>
+    </div>
+
+    <div class="box">
+        <label style="font-size: 0.7rem; color: var(--neon-blue);">Médico Coordenador</label>
+        <input type="text" id="medico_nome" placeholder="Nome do Médico" style="width:100%; background:#000; border:1px solid #333; color:white; padding:10px; margin-top:5px; border-radius:5px;">
+        <input type="text" id="medico_crm" placeholder="CRM/UF" style="width:100%; background:#000; border:1px solid #333; color:white; padding:10px; margin-top:10px; border-radius:5px;">
+    </div>
+
+    <button class="btn-action" onclick="salvarPCMSO()">FINALIZAR PLANO DE SAÚDE</button>
+
+    <script>
+        const firebaseConfig = { apiKey: "SUA_API_KEY", projectId: "SEU_PROJETO" }; 
+        if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+    </script>
+    <script src="polimata-core.js"></script>
+    <script>
+        window.onload = async () => {
+            // Primeiro, tentamos carregar dados existentes do PCMSO
+            Polimata.load('pcmso', (data) => {
+                if(data) {
+                    document.getElementById('ex_audio').checked = data.ex_audio;
+                    document.getElementById('ex_espiro').checked = data.ex_espiro;
+                    document.getElementById('ex_psico').checked = data.ex_psico;
+                    document.getElementById('ex_hemo').checked = data.ex_hemo;
+                    document.getElementById('medico_nome').value = data.medico_nome;
+                    document.getElementById('medico_crm').value = data.medico_crm;
+                }
+            });
+
+            // Inteligência Polimata: Carrega a APR para ver se há riscos que exigem exames
+            Polimata.load('apr', (aprData) => {
+                if(aprData && aprData.perigo) {
+                    const p = aprData.perigo.toLowerCase();
+                    if(p.includes("ruído")) document.getElementById('ex_audio').checked = true;
+                    if(p.includes("poeira") || p.includes("fumos")) document.getElementById('ex_espiro').checked = true;
+                    if(p.includes("altura")) document.getElementById('ex_psico').checked = true;
+                }
+            });
+        };
+
+        async function salvarPCMSO() {
+            const data = {
+                ex_audio: document.getElementById('ex_audio').checked,
+                ex_espiro: document.getElementById('ex_espiro').checked,
+                ex_psico: document.getElementById('ex_psico').checked,
+                ex_hemo: document.getElementById('ex_hemo').checked,
+                medico_nome: document.getElementById('medico_nome').value,
+                medico_crm: document.getElementById('medico_crm').value
+            };
+            await Polimata.save('pcmso', data);
+            alert("PCMSO Sincronizado com os riscos do PGR!");
+        }
+    </script>
+</body>
+</html>

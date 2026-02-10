@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ANDA - Permissão de Trabalho (PT)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg: #0a0b10; --surf: #161b22; --border: #30363d; --neon-green: #39ff14; --text: #f0f6fc; }
+        body { background: var(--bg); color: var(--text); font-family: 'Roboto', sans-serif; padding: 15px; margin: 0; }
+        .header { border-bottom: 2px solid var(--neon-green); padding: 15px 0; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
+        .title { font-family: 'Orbitron'; color: var(--neon-green); font-size: 1.2rem; }
+        .card { background: var(--surf); border: 1px solid var(--border); border-radius: 12px; padding: 15px; margin-bottom: 15px; }
+        .checklist-item { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; font-size: 0.85rem; padding: 8px; background: #0d1117; border-radius: 6px; }
+        input[type="checkbox"] { width: 20px; height: 20px; accent-color: var(--neon-green); }
+        .btn-auth { background: var(--neon-green); color: black; border: none; padding: 20px; width: 100%; border-radius: 10px; font-weight: bold; font-family: 'Orbitron'; font-size: 1rem; cursor: pointer; box-shadow: 0 0 15px rgba(57, 255, 20, 0.4); }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div><div class="title">P.T. AUTORIZAÇÃO</div><small>Permissão para Trabalho em Risco</small></div>
+        <a href="index.html" style="color:#666; text-decoration:none; font-size:0.8rem;">↩ HUB</a>
+    </div>
+
+    
+
+    <div class="card">
+        <label style="color:var(--neon-green); font-size:0.7rem;">VERIFICAÇÕES DE SEGURANÇA (Obrigatórias)</label>
+        <div class="checklist-item"><input type="checkbox"> Fontes de energia bloqueadas e etiquetadas (LOTO)?</div>
+        <div class="checklist-item"><input type="checkbox"> Área isolada e sinalizada?</div>
+        <div class="checklist-item"><input type="checkbox"> Equipe treinada e com ASO apto?</div>
+        <div class="checklist-item"><input type="checkbox"> Equipamentos de resgate no local?</div>
+        <div class="checklist-item"><input type="checkbox"> Condições climáticas favoráveis?</div>
+    </div>
+
+    <div class="card">
+        <label style="color:var(--neon-green); font-size:0.7rem;">VALIDADE DA PERMISSÃO</label>
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+            <input type="time" value="08:00">
+            <input type="time" value="18:00">
+        </div>
+    </div>
+
+    <button class="btn-auth" onclick="alert('TRABALHO AUTORIZADO. Protocolo de segurança ativado.')">EMITIR PERMISSÃO (P.T.)</button>
+</body>
+</html>

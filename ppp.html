@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ANDA - PPP Digital Premium</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
+
+    <style>
+        :root { --bg: #0d1117; --surf: #161b22; --border: #30363d; --neon-indigo: #6610f2; --text: #f0f6fc; }
+        body { background: var(--bg); color: var(--text); font-family: 'Roboto', sans-serif; padding: 20px; margin: 0; }
+        
+        .header { border-bottom: 2px solid var(--neon-indigo); padding-bottom: 15px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
+        .title { font-family: 'Orbitron'; color: var(--neon-indigo); font-size: 1.3rem; }
+        
+        .section-box { background: var(--surf); border: 1px solid var(--border); border-radius: 8px; padding: 15px; margin-bottom: 15px; }
+        .section-title { font-size: 0.65rem; color: var(--neon-indigo); font-weight: bold; margin-bottom: 10px; letter-spacing: 1px; }
+        
+        .data-row { display: flex; justify-content: space-between; border-bottom: 1px solid #222; padding: 8px 0; font-size: 0.85rem; }
+        .label-p { color: #8b949e; }
+
+        .sync-badge { background: #238636; color: white; padding: 4px 8px; border-radius: 4px; font-size: 0.6rem; float: right; }
+
+        .btn-ppp { 
+            background: var(--neon-indigo); color: white; border: none; padding: 18px; 
+            width: 100%; border-radius: 10px; font-weight: bold; font-family: 'Orbitron'; cursor: pointer;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <div><div class="title">P.P.P. DIGITAL</div><small>Perfil Profissiográfico Previdenciário</small></div>
+        <a href="index.html" style="color:#666; text-decoration:none; font-size:0.8rem;">↩ HUB</a>
+    </div>
+
+    <div class="section-box">
+        <div class="section-title">SEÇÃO I - DADOS ADMINISTRATIVOS <span class="sync-badge">SINC. ATIVA</span></div>
+        <div class="data-row"><span class="label-p">Nome:</span> <span id="ppp_nome">...</span></div>
+        <div class="data-row"><span class="label-p">CPF:</span> <span id="ppp_cpf">...</span></div>
+        <div class="data-row"><span class="label-p">NIT/PIS:</span> <span id="ppp_nit">...</span></div>
+    </div>
+
+    <div class="section-box">
+        <div class="section-title">SEÇÃO II - REGISTROS AMBIENTAIS (LTCAT)</div>
+        <div id="ppp_riscos" style="font-size: 0.8rem; color: #c9d1d9; line-height: 1.6;">
+            Buscando enquadramento GFIP do LTCAT...
+        </div>
+    </div>
+
+    <div class="section-box">
+        <div class="section-title">SEÇÃO III - MONITORAÇÃO BIOLÓGICA (PCMSO/ASO)</div>
+        <div id="ppp_exames" style="font-size: 0.8rem; color: #c9d1d9;">
+            Extraindo histórico de exames clínicos e complementares...
+        </div>
+    </div>
+
+    <div class="section-box">
+        <div class="section-title">RESPONSÁVEL TÉCNICO</div>
+        <input type="text" id="ppp_resp" placeholder="Nome do Responsável (CREA/CRM)">
+    </div>
+
+    <button class="btn-ppp" onclick="gerarPDF()">CONSOLIDAR E EXPORTAR PPP</button>
+
+    <script src="polimata-core.js"></script>
+    <script>
+        window.onload = () => {
+            // Sincronização em Cascata (O "Pulo do Gato" da Polimata Engine)
+            
+            // 1. Dados Básicos do ASO
+            Polimata.load('aso', (data) => {
+                if(data) document.getElementById('ppp_nome').innerText = data.nome;
+            });
+
+            // 2. Dados de Risco do LTCAT
+            Polimata.load('ltcat', (data) => {
+                if(data) {
+                    document.getElementById('ppp_riscos').innerHTML = `
+                        <b>Código GFIP:</b> ${data.gfip_code}<br>
+                        <b>Metodologia:</b> ${data.metodo}<br>
+                        <b>Conclusão:</b> ${data.conclusao_tecnica}
+                    `;
+                }
+            });
+
+            // 3. Dados Médicos do PCMSO
+            Polimata.load('pcmso', (data) => {
+                if(data) {
+                    let ex = "Exames Realizados: ";
+                    if(data.ex_audio) ex += "Audiometria, ";
+                    if(data.ex_hemo) ex += "Hemograma, ";
+                    document.getElementById('ppp_exames').innerText = ex + " Clínico Geral.";
+                }
+            });
+        };
+
+        function gerarPDF() {
+            alert("Compilando dados de Saúde (S-2220) e Riscos (S-2240) para o PDF do PPP...");
+        }
+    </script>
+</body>
+</html>
